@@ -65,7 +65,7 @@ comments: true
   ```
   !["ifconfig"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png)
 
-  ```python
-  s = "Python syntax highlighting"
-  print s
-  ```
+```python
+s = "Python syntax highlighting123"
+print s
+```
