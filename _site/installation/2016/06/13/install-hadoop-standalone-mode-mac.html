@@ -2,9 +2,9 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Sample 2</title>
+	<title>Install Hadoop in Standalone mode on MAC OS</title>
 	
-	<meta name="description" content="Sample placeholder post.">
+	<meta name="description" content="Hadoop Installation - Step by step tutorial on how to install Hadoop in stand alone mode.">
 	
 	<meta name="author" content="Omair Aasim">
 
@@ -157,23 +157,71 @@
 
 	<div class="col-sm-9 col-sm-offset-3">
 		<div class="page-header">
-  <h1>Sample 2 </h1>
+  <h1>Install Hadoop in Standalone mode on MAC OS </h1>
 </div>
-	
+
 <article>
 
 	<div class="col-sm-10">
 	 <span class="post-date">
 	   
-	   November 
-	   14th,
+	   June
+	   13th,
 	   
-	   2013
+	   2016
 	 </span>
 	  <div class="article_body">
-	  <p>Lorem ipsum dolor sit amet,  consectetur adipisicing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,  sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	  <p>In this tutorial, I am going to show you how to setup Hadoop in stand alone mode. Before you follow this - you have to install Ubuntu on VirtualBox. If you have not done that yet - then please follow this tutorial first - <a href="/installation/2016/06/11/install-ubuntu-virtualbox-mac.html">Installing Ubuntu on VirtualBox on MAC OS</a></p>
 
-<p>Lorem ipsum dolor sit amet,  consectetur adipisicing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,  sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p><strong>Step 1: Install Java</strong></p>
+
+<p>The first thing we need to install is java. Run the following command to install Java.</p>
+
+<p><code>
+  sudo apt-get install openjdk-7-jdk
+ </code>
+  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png" alt="&quot;Install Java&quot;" /></p>
+
+<p>Java is successfully installed.
+  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_done_java.png" alt="&quot;Install Java&quot;" /></p>
+
+<p><strong>Step 2: Test Java installation</strong></p>
+
+<p>Check if Java was successfully installed by typing the following command. You should see the output as shown in the screenshot below.
+  <code>
+  java -version
+ </code>
+  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png" alt="&quot;Test Java Installation&quot;" /></p>
+
+<p><strong>Step 3: Finding IP address of Virtual Machine</strong></p>
+
+<p>This is a matter of personal preference. Using the VirtualBox is not very user friendly. We cannot copy/paste commands etc (Atleast I’ve not figured out an easy way) - so I prefer to use the MAC Terminal to connect to Virtualbox and use that.</p>
+
+<p>So in order to connect - we need to know the IP address of the Virtual Machine. To find that out - enter the following command
+  <code>
+  ifconfig
+ </code>
+  You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
+  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png" alt="&quot;ifconfig&quot;" /></p>
+
+<p><strong>Step 4: Using Terminal</strong></p>
+
+<p>Open the Terminal window in your MAC and type the following ssh command. Replace the IP address with what you found in Step 3. Also “hadoop” is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.
+  <code>python
+  ssh hadoop@192.168.1.10
+ </code>
+  This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.</p>
+
+<p>It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.
+  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step4_Using_terminal.png" alt="&quot;ifconfig&quot;" /></p>
+
+<p><strong>Step 5: Download Hadoop</strong></p>
+
+<p>I am using Hadoop 1.2.1 version here. We can download that from the apache website using the wget command as shown below.
+  <code>
+  wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+ </code>
+  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png" alt="&quot;ifconfig&quot;" /></p>
 
 	  </div>
 
@@ -182,56 +230,32 @@
 		  <li><i class="fa fa-folder-open"></i></li>
 		  
 		  
-			 
-				<li><a href="/categories.html#general-ref">
-					general <span>(1)</span>
-					,
-				</a></li>
-			 
-				<li><a href="/categories.html#demo-ref">
-					demo <span>(1)</span>
-					,
-				</a></li>
-			 
-				<li><a href="/categories.html#sample-ref">
-					sample <span>(1)</span>
+			
+				<li><a href="/categories.html#installation-ref">
+					installation <span>(2)</span>
 					
 				</a></li>
 			
 		  
 		</ul>
-		  
+		
 
 		
 		<ul class="list-inline">
 		  <li><i class="fa fa-tags"></i></li>
 		  
 		  
-			 
+			
 				<li>
-					<a href="/tags.html#demo-ref">
-					demo <span>(2)</span>
+					<a href="/tags.html#installation-ref">
+					installation <span>(2)</span>
 					,
 					</a>
 				</li>
-			 
+			
 				<li>
-					<a href="/tags.html#dbyll-ref">
-					dbyll <span>(2)</span>
-					,
-					</a>
-				</li>
-			 
-				<li>
-					<a href="/tags.html#dbtek-ref">
-					dbtek <span>(2)</span>
-					,
-					</a>
-				</li>
-			 
-				<li>
-					<a href="/tags.html#sample2-ref">
-					sample2 <span>(1)</span>
+					<a href="/tags.html#hadoop installation-ref">
+					hadoop installation <span>(2)</span>
 					
 					</a>
 				</li>
@@ -239,14 +263,14 @@
 		  
 		  
 		</ul>
-		  
+		
 
 		<hr>
 
 		<div>
       <section class="share col-sm-6">
         <h4 class="section-title">Share Post</h4>
-        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Sample 2&via=omairaasim"
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Install Hadoop in Standalone mode on MAC OS&via=omairaasim"
            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
           <i class="fa fa-twitter fa-lg"></i>
           Twitter
@@ -263,43 +287,51 @@
         </a>
       </section>
 
-      <section class="col-sm-6 author">
-        <img src="http://www.gravatar.com/avatar/ded6b2a2d3dcd1039f6fef5313d85cd2" class="img-rounded author-image" />
-        <h4 class="section-title author-name">Omair Aasim</h4>
-        <p class="author-bio">Software Engineer by profession - Entrepreneur at heart - CoFounder and CTO at DeZyre</p>
-      </section>
+    
     </div>
 
     <div class="clearfix"></div>
 
 		<ul class="pager">
 		  
-		  <li class="previous disabled"><a>&larr; Previous</a></li>
+		  <li class="previous"><a href="/installation/2016/06/11/install-ubuntu-virtualbox-mac.html" title="Installing Ubuntu on VirtualBox on MAC OS">&larr; Previous</a></li>
 		  
 		  
-		  <li class="next"><a href="/installation/2016/06/11/install-ubuntu-virtualbox-mac.html" title="Installing Ubuntu on VirtualBox on MAC OS">Next &rarr;</a></li>
+			<li class="next disabled"><a>Next &rarr;</a>
 		  
 		</ul>
 
 		<hr>
 	</div>
-	
+
 	<div class="col-sm-2 sidebar-2">
-	
+
 	</div>
 </article>
 <div class="clearfix"></div>
 
 
 
+    
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'dbyll';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
 
-		<footer>
-			<hr/>
-			<p>
-				&copy; 2016 Omair Aasim with Jekyll. Theme: <a href="https://github.com/dbtek/dbyll">dbyll</a> by dbtek.
-			</p>
-		</footer>
+
+
+
+		
 	</div>
 
 	<script type="text/javascript" src="/assets/resources/jquery/jquery.min.js"></script>

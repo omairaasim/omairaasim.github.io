@@ -1,72 +1,323 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>dbyll</title>
+		<title>Omair Aasim</title>
 		<description>Stylish Jekyll Theme</description>
 		<link>/</link>
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
-				<title>Hello World!</title>
-				<description>&lt;p&gt;&lt;strong&gt;dbyll&lt;/strong&gt; is minimalist, stylish theme for jekyll. Supports gravatar, account links (github, twitter, e-mail, pinterest, résume file) and a bio.&lt;/p&gt;
+				<title>Install Hadoop in Standalone mode on MAC OS</title>
+				<description>&lt;p&gt;In this tutorial, I am going to show you how to setup Hadoop in stand alone mode. Before you follow this - you have to install Ubuntu on VirtualBox. If you have not done that yet - then please follow this tutorial first - &lt;a href=&quot;/installation/2016/06/11/install-ubuntu-virtualbox-mac.html&quot;&gt;Installing Ubuntu on VirtualBox on MAC OS&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;dbyll&lt;/strong&gt; is brought to you by &lt;strong&gt;&lt;a href=&quot;http://ismaildemirbilek.com&quot;&gt;dbtek&lt;/a&gt;&lt;/strong&gt;. Open sourced under &lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;MIT&lt;/a&gt; license.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 1: Install Java&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;dbyll-is-on-github&quot;&gt;dbyll is on GitHub&lt;/h3&gt;
+&lt;p&gt;The first thing we need to install is java. Run the following command to install Java.&lt;/p&gt;
 
-&lt;p&gt;&lt;a class=&quot;btn btn-default&quot; href=&quot;https://github.com/dbtek/dbyll&quot;&gt;Grab your copy now!&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;
+  sudo apt-get install openjdk-7-jdk
+ &lt;/code&gt;
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Java is successfully installed.
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_done_java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2: Test Java installation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Check if Java was successfully installed by typing the following command. You should see the output as shown in the screenshot below.
+  &lt;code&gt;
+  java -version
+ &lt;/code&gt;
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png&quot; alt=&quot;&amp;quot;Test Java Installation&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Finding IP address of Virtual Machine&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a matter of personal preference. Using the VirtualBox is not very user friendly. We cannot copy/paste commands etc (Atleast I’ve not figured out an easy way) - so I prefer to use the MAC Terminal to connect to Virtualbox and use that.&lt;/p&gt;
+
+&lt;p&gt;So in order to connect - we need to know the IP address of the Virtual Machine. To find that out - enter the following command
+  &lt;code&gt;
+  ifconfig
+ &lt;/code&gt;
+  You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Using Terminal&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Open the Terminal window in your MAC and type the following ssh command. Replace the IP address with what you found in Step 3. Also “hadoop” is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.
+  &lt;code&gt;python
+  ssh hadoop@192.168.1.10
+ &lt;/code&gt;
+  This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.&lt;/p&gt;
+
+&lt;p&gt;It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step4_Using_terminal.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Download Hadoop&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I am using Hadoop 1.2.1 version here. We can download that from the apache website using the wget command as shown below.
+  &lt;code&gt;
+  wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+ &lt;/code&gt;
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
 </description>
-				<pubDate>Fri, 15 Nov 2013 00:00:00 +0530</pubDate>
-				<link>/general/setup/demo/2013/11/15/hello-world.html</link>
-				<guid isPermaLink="true">/general/setup/demo/2013/11/15/hello-world.html</guid>
+				<pubDate>Mon, 13 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/installation/2016/06/13/install-hadoop-standalone-mode-mac.html</link>
+				<guid isPermaLink="true">/installation/2016/06/13/install-hadoop-standalone-mode-mac.html</guid>
 			</item>
 		
 			<item>
-				<title>Configuration</title>
-				<description>&lt;p&gt;In your config file change these settings&lt;/p&gt;
+				<title>Installing Ubuntu on VirtualBox on MAC OS</title>
+				<description>&lt;p&gt;There are many ways of getting started with Hadoop. If you don’t want to get your hands dirty - the quickest way is to download a quickstart VM from Cloudera or Hortonworks and get going. But if you want to get into the nitty gritty details and want to have the satisfaction of installing Hadoop from scratch - this tutorial is for you.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;l-Scalar-Plain&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;dbyll&lt;/span&gt;
-&lt;span class=&quot;l-Scalar-Plain&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;yourname&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;youremail&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;github&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;asd123&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;twitter&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;asd123&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;pinterest&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;asd123&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;linkedin&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;asd123&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;resume&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;asd123&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;bio&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;Your stylish,  minimalist theme!&lt;/span&gt;  
-  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;email_md5&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;md5ofemail&lt;/span&gt;  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;In order to Install Hadoop, we need to have a Linux operating system. So we cannot install Hadoop on Windows or MAC systems. The work around for that is we need to install a virtualization software and then install Linux on that. There are many virtualization software’s available like VMWare Fusion but it only comes as a 30 day trial version. So I prefer using Oracle VirtualBox.&lt;/p&gt;
+
+&lt;p&gt;In this tutorial, I will be sharing step by step instructions of installing Ubuntu on VirtualBox.&lt;br /&gt;
+   &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1 - Download VirtualBox&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You can download virtual box from here (https://www.virtualbox.org/wiki/Downloads). You can select the OS X version. Once you download it, you will see a file similar file in your download folder - &lt;em&gt;VirtualBox-5.0.20-106931-OSX.dmg&lt;/em&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step1_Download_Virtualbox.png&quot; alt=&quot;&amp;quot;Download VirtualBox&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2 - Begin installation of VirtualBox&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Double click the dmg file which will open a similar window as shown below. Double click on VirtualBox.pkg icon.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step2_Install_Virtualbox.png&quot; alt=&quot;&amp;quot;Begin installation of VirtualBox&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3 - Install VirtualBox&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on “continue”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step3_Install_1.png&quot; alt=&quot;&amp;quot;Install VirtualBox&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4 - Installation successful&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In the next step it will show you the space it will take on your system and give you an option to change the install location. I’ve gone ahead with the default location. Click on “Install” to proceed. This will complete the installation of VirtualBox.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step4_Install_2.png&quot; alt=&quot;&amp;quot;Installation successful&amp;quot;&quot; /&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step4_Install_successful.png&quot; alt=&quot;&amp;quot;Install VirtualBox successful&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5 - Launch VirtualBox&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Go to your applications and launch VirtualBox. The first screen will look like below.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step5_Launch_Virtualbox.png&quot; alt=&quot;&amp;quot;Launch VirtualBox&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6 - Specify name and Operating system&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on “New” and specify any name for the Virtual machine. Since I am going to be using it for Hadoop purpose - I’m specifying “HadoopVM”.&lt;/p&gt;
+
+&lt;p&gt;Next we need to select an operating system. Select Type as “Linux” and version as “Ubuntu (64-bit)”.&lt;/p&gt;
+
+&lt;p&gt;Click on “Continue”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step6_New.png&quot; alt=&quot;&amp;quot;Specify name and Operating system&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7 - Specify Memory Size&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It is recommended to allocate 1GB RAM. So I am going to specify 1024 MB. Click on “Continue”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step7_Memory_Size.png&quot; alt=&quot;&amp;quot;Specify Memory Size&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 8 - Hard disk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We are going to create a new virtual hard disk. So select that option and click on “Create”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step8_Harddisk.png&quot; alt=&quot;&amp;quot;Hard disk&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 9 - Hard disk file type&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;On the next screen, we need to select the file type. Select the default option of VDI (VirtualBox Disk Image) and click on “Continue”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step9_Harddisk_type.png&quot; alt=&quot;&amp;quot;Hard disk file type&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 10 - Fixed or dynamically allocated hard disk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In this step, we need to specify if we want the hard disk to grow dynamically or if we want to create it with a fixed size. We are going to select the “Dynamically allocation” option here.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step10_dynamically_allocated.png&quot; alt=&quot;&amp;quot;Fixed or dynamically allocated hard disk&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 11 - Size of hard disk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here specify 20 GB as maximum hard disk allocation.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step11_Size.png&quot; alt=&quot;&amp;quot;Size of hard disk&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 12 - Virtual machine created&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Tada !! Thats it - your virtual machine is ready. This was the easy part. Next we need to install the Ubuntu operation system on this virtual machine.&lt;/em&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step12_VM_created.png&quot; alt=&quot;&amp;quot;Virtual machine created&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 13 - Network Settings&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Before we install Ubuntu - we need to make the following network settings.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Click on “Settings”&lt;/li&gt;
+  &lt;li&gt;Click on “Network”&lt;/li&gt;
+  &lt;li&gt;Select “Adapter 1”&lt;/li&gt;
+  &lt;li&gt;Make sure “Enable Network Adapter” is checked&lt;/li&gt;
+  &lt;li&gt;For Attached to - Select “Bridged Adapter”&lt;/li&gt;
+  &lt;li&gt;Click “OK”.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Maybe there is a different way - but the reason I do this is so I can connect to this virtual machine from my MAC’s terminal. Its much easier to work on the Terminal as it allows copy/paste etc. You will see that as we move on.&lt;br /&gt;
+   &lt;br /&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step13_Network_settings.png&quot; alt=&quot;&amp;quot;Network Settings&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 14 - Download and select Ubuntu&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we need to install Ubuntu on this Virtual machine. Follow these steps.
+  * First download Ubuntu operating system from &lt;a href=&quot;https://s3.amazonaws.com/omairaasim.github.io/ubuntu/ubuntu-12.04.3-server-i386.iso&quot;&gt;here&lt;/a&gt;
+  * Then back on VirtualBox - click on Settings
+  * Click on Storage
+  * Click on Empty
+  * Click on the small disk next to IDE Secondary Master and select “Choose Virtual Optical Disk File”
+     
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_Select_Ubuntu.png&quot; alt=&quot;&amp;quot;Download and select Ubuntu&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Browse to the folder where you downloaded the Ubuntu operating system and select the iso file - &lt;em&gt;ubuntu-12.04.3-server-i386.iso&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;Click on Open.
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_select_ISO.png&quot; alt=&quot;&amp;quot;Browse iso ubuntu file&amp;quot;&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Select “OK”.
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_Ubuntu_selected.png&quot; alt=&quot;&amp;quot;Select iso Ubuntu file&amp;quot;&quot; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 15 - Install Ubuntu&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Back on the main VirtualBox screen - its time to power the Virtual machine on. Click on the “Start” button. You will be asked to select “Language”. To continue with “English” press “Enter”. Here your mouse will not work - so use the keyboard arrows and enter to take actions.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step15_Click_Start_Language.png&quot; alt=&quot;&amp;quot;Install Ubuntu&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 16 - Install Ubuntu Server&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here the default selected option is “Install Ubuntu Server”. Press “Enter” to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step16_Install_Ubuntu_server.png&quot; alt=&quot;&amp;quot;Install Ubuntu Server&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 17 - Select Language&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It will ask for language again. Select the language and press “Enter” to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step17_Select_language.png&quot; alt=&quot;&amp;quot;Select Language&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 18 - Select Country&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Select the country and press “Enter” to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step18_Country.png&quot; alt=&quot;&amp;quot;Select Country&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 19 - Detect keyboard&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;For Detect keyboard layout - select “No” and press “Enter” to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step19_keyboard_layout.png&quot; alt=&quot;&amp;quot;Detect keyboard&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 20 - Keyboard language&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Select the language and press “Enter” to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step20_Language.png&quot; alt=&quot;&amp;quot;Keyboard language&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 21 - Keyboard layout&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Select the language and press “Enter” to continue. This will begin the installation.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step21_keyboard_language.png&quot; alt=&quot;&amp;quot;Keyboard layout&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 22 - Enter Hostname&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here you can specify any Hostname you like. Since I am using this for Hadoop - I am going to enter Hostname as “hadoop”. Press tab which will select “Continue” option - then press “Enter”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step22_Hostname.png&quot; alt=&quot;&amp;quot;Enter Hostname&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 23 - Enter name for user&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It will ask you to enter name for the new user. Again I am using “hadoop”. Press tab and then hit “Enter”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step23_Username.png&quot; alt=&quot;&amp;quot;Enter name for user&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 24 - Enter username&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It will ask you to enter username for the new user. Again I am using “hadoop”. Press tab and then hit “Enter”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step24_useraccount.png&quot; alt=&quot;&amp;quot;Enter username&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 25 - Enter Password&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;On the next screen - it will ask you to enter a password for this user. Enter the password of your choice - hit tab and press enter to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step25_password.png&quot; alt=&quot;&amp;quot;Enter Password&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 26 - Re Enter password&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The next screen will ask you to confirm the password - re enter the same password and continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step26_confirm_password.png&quot; alt=&quot;&amp;quot;Re Enter password&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 27 - Encrypt Home Directory&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The next step will ask if you want to encrypt your home directory - we dont need that here - so will select “No”.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step27_Encrypt_Home.png&quot; alt=&quot;&amp;quot;Encrypt Home Directory&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 28 - Select Time Zone&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Based on your location, it will automatically get your time zone. If it is correct - just press “Enter” and continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step28_Timezone.png&quot; alt=&quot;&amp;quot;Select Time Zone&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 29 - Partition Disks&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here we need to select a partitioning method. Select the first option “Guided - use entire disk” and press Enter
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step29_Partition_Disk.png&quot; alt=&quot;&amp;quot;Partition Disks&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 30 - Select disk to partition&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It will show only one disk - just press Enter.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step30_partition_disk_name.png&quot; alt=&quot;&amp;quot;Select disk to partition&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 31 - Write changes to disk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here it will ask you to confirm if you want to write the changes to disk. Select “Yes” and press “Enter”
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step31_Write_to_Disk.png&quot; alt=&quot;&amp;quot;Write changes to disk&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 32 - Install base system&lt;/strong&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step32_Installing_Base_system.png&quot; alt=&quot;&amp;quot;Install base system&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 33 - HTTP proxy information&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Leave this empty and continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step33_Proxy.png&quot; alt=&quot;&amp;quot;HTTP proxy information&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 34 - Managing upgrades&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Just select the default option “No Automatic Updates” and continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step34_Updates.png&quot; alt=&quot;&amp;quot;Managing upgrades&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 35 - Software Selection&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here we need to select what software we want to install. For the time being just select OpenSSH server. To select press “Space bar” - then hit tab and press “Enter” to continue.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step35_Install_Openssh.png&quot; alt=&quot;&amp;quot;Software Selection&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 36 - Install Grub boot loader&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Select “Yes” to install Grub boot loader.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step36_Grub_Install.png&quot; alt=&quot;&amp;quot;Install Grub boot loader&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 37 - Finish Installation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally - the Ubuntu installation is complete. Select Continue to proceed.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step37_Installation_Complete.png&quot; alt=&quot;&amp;quot;Finish Installation&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 38 - Login Prompt&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once the installation process completes - the login prompt will come. Enter the username and password we created at the time of installation to login. I had created the user “hadoop” - so I am using that to login.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step38_login_VM.png&quot; alt=&quot;&amp;quot;Login Prompt&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 39 - Successful Login Screen&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you login - you will see this screen.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step39_successful_login.png&quot; alt=&quot;&amp;quot;Successful Login Screen&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 40 - Update Ubuntu OS&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next step is to update the Ubuntu OS. You need to be connected to internet to do this update. Type in this command
+  &lt;code&gt;
+  sudo apt-get update
+ &lt;/code&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step40_Update_Ubuntu.png&quot; alt=&quot;&amp;quot;Update Ubuntu OS&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 41 - Ubuntu update complete&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once Ubuntu is updated - you will see a screen similar to the one below.
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step41_Done_Updating_OS.png&quot; alt=&quot;&amp;quot;Install VirtualBox&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hola !  That brings us to the end of this tutorial. We have successfully installed Ubuntu on VirtualBox. This is the first step required for installing Hadoop.&lt;/p&gt;
+
+&lt;p&gt;In the next tutorial - we will start with installing Hadoop on this Virtual machine.&lt;/p&gt;
 </description>
-				<pubDate>Fri, 15 Nov 2013 00:00:00 +0530</pubDate>
-				<link>/general/setup/demo/2013/11/15/configuration.html</link>
-				<guid isPermaLink="true">/general/setup/demo/2013/11/15/configuration.html</guid>
-			</item>
-		
-			<item>
-				<title>Sample</title>
-				<description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-</description>
-				<pubDate>Thu, 14 Nov 2013 00:00:00 +0530</pubDate>
-				<link>/general/demo/2013/11/14/sample.html</link>
-				<guid isPermaLink="true">/general/demo/2013/11/14/sample.html</guid>
-			</item>
-		
-			<item>
-				<title>Sample 2</title>
-				<description>&lt;p&gt;Lorem ipsum dolor sit amet,  consectetur adipisicing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,  sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet,  consectetur adipisicing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,  sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
-</description>
-				<pubDate>Thu, 14 Nov 2013 00:00:00 +0530</pubDate>
-				<link>/general/demo/sample/2013/11/14/sample-2.html</link>
-				<guid isPermaLink="true">/general/demo/sample/2013/11/14/sample-2.html</guid>
+				<pubDate>Sat, 11 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/installation/2016/06/11/install-ubuntu-virtualbox-mac.html</link>
+				<guid isPermaLink="true">/installation/2016/06/11/install-ubuntu-virtualbox-mac.html</guid>
 			</item>
 		
 	</channel>

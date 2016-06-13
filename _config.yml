@@ -7,25 +7,26 @@ highlighter: pygments
 markdown: kramdown
 disqus: dbyll
 google_analytics: dbyll
-title: dbyll
+title: Omair Aasim
 
 defaults:
   -
     scope:
       path: "" # empty string for all files
     values:
-      title: dbyll
+      title: Hadoop Tutorials
+
 
 description: Stylish Jekyll Theme
 author:
-  name: dbyll
-  email: dbyll@ismaildemirbilek.com
-  github: dbtek
-  twitter: dbtek
-  pinterest: asd123
-  linkedin: asd123
-  bio: Your stylish, minimalist theme!
-  email_md5: 726351295ec82e145928582f595aa3aa
+  name: Omair Aasim
+  email: omairaasim@gmail.com
+  github: omairaasim
+  twitter: omairaasim
+  pinterest: omairaasim
+  linkedin: omairaasim
+  bio: Software Engineer by profession - Entrepreneur at heart - CoFounder and CTO at DeZyre
+  email_md5: ded6b2a2d3dcd1039f6fef5313d85cd2
 
 rss_path: feed.xml
 categories_path: categories.html
