@@ -21,7 +21,7 @@
 &lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Java is successfully installed.
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_done_java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_done_java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 2: Test Java installation&lt;/strong&gt;&lt;/p&gt;
 
@@ -43,12 +43,13 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 4: Using Terminal&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Open the Terminal window in your MAC and type the following ssh command. Replace the IP address with what you found in Step 3. Also “hadoop” is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.&lt;/p&gt;
+&lt;p&gt;Open the Terminal window in your MAC and type the ollowing ssh command. Replace the IP address with what you found in Step 3. Also “hadoop” is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh hadoop@192.168.1.10
 &lt;/code&gt;&lt;/pre&gt;
@@ -56,8 +57,9 @@
 
 &lt;p&gt;This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.&lt;/p&gt;
 
-&lt;p&gt;It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step4_Using_terminal.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step4_Using_terminal.png&quot; alt=&quot;&amp;quot;using MAC terminal&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 5: Download Hadoop&lt;/strong&gt;&lt;/p&gt;
 
@@ -67,11 +69,120 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png&quot; alt=&quot;&amp;quot;download hadoop file&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6: Untar Hadoop file&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we need to untar this hadoop file that we downloaded. The command for that is&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tar -xvzf hadoop-1.2.1.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step6_untar_hadoop.png&quot; alt=&quot;&amp;quot;Untar hadoop file&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7: Copy the hadoop folder&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you untar the hadoop tar file - you will see a folder created in the same directory with the name &lt;em&gt;hadoop-1.2.1&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Next we need to copy this into /usr/local/hadoop&lt;/p&gt;
+
+&lt;p&gt;Use this command to copy&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo cp -r hadoop-1.2.1 /usr/local/hadoop
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step7_copy_usr.png&quot; alt=&quot;&amp;quot;Copy hadoop folder&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 8: Setup Environment&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we need to inform the system where Hadoop framework is located. We have to edit the .bashrc file.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /home/hadoop/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Move to end of the .bashrc file
+- Press “i” to enable “insert” mode.&lt;/p&gt;
+
+&lt;p&gt;Then copy paste the 2 lines below at the end of the .bashrc file&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export HADOOP_PREFIX=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_PREFIX/bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Then press “wq” to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step8_add_export_bash.png&quot; alt=&quot;&amp;quot;Edit bashrc file&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 9: Update the bash Settings&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To update the bash settings - we simply need to execute it.&lt;/p&gt;
+
+&lt;p&gt;Run the command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;exec bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step12_exec_bash.png&quot; alt=&quot;&amp;quot;Exec bashrc file&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 10: Setup Java location in Hadoop&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we need to inform Hadoop where java is located in the system. We have to specify this in the &lt;em&gt;hadoop-env.sh&lt;/em&gt; file.&lt;/p&gt;
+
+&lt;p&gt;Enter the command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /usr/local/hadoop/conf/hadoop-env.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;Press “i” to insert mode.&lt;/li&gt;
+  &lt;li&gt;Uncomment the JAVA_HOME and replace with&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-i386
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Press “wq” to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step10_uncomment_java.png&quot; alt=&quot;&amp;quot;Specify JAVA_HOME&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 11: Test Hadoop&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In order to check if Hadoop is successfully installed - run the following command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You should see a similar output&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step11_test_hadoop.png&quot; alt=&quot;&amp;quot;Test Hadoop&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At this point, Hadoop is successfully installed in Standalone mode.&lt;/p&gt;
+
+&lt;p&gt;Things to note about Stand alone mode
+- All Hadoop services run within a single JVM
+- HDFS is not present
+- Hadoop uses local file system&lt;/p&gt;
+
+&lt;p&gt;So I typically do not like working in this mode. It does not give you a feel of working in a Hadoop cluster.&lt;/p&gt;
+
+&lt;p&gt;In the next tutorial, we will install Hadoop in a Pseudo Distributed mode.&lt;/p&gt;
 </description>
-				<pubDate>Mon, 13 Jun 2016 00:00:00 +0530</pubDate>
-				<link>/installation/2016/06/13/install-hadoop-standalone-mode-mac.html</link>
-				<guid isPermaLink="true">/installation/2016/06/13/install-hadoop-standalone-mode-mac.html</guid>
+				<pubDate>Sat, 11 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/installation/2016/06/11/install-hadoop-standalone-mode-mac.html</link>
+				<guid isPermaLink="true">/installation/2016/06/11/install-hadoop-standalone-mode-mac.html</guid>
 			</item>
 		
 			<item>
@@ -330,9 +441,9 @@
 
 &lt;p&gt;In the next tutorial - we will start with installing Hadoop on this Virtual machine.&lt;/p&gt;
 </description>
-				<pubDate>Sat, 11 Jun 2016 00:00:00 +0530</pubDate>
-				<link>/installation/2016/06/11/install-ubuntu-virtualbox-mac.html</link>
-				<guid isPermaLink="true">/installation/2016/06/11/install-ubuntu-virtualbox-mac.html</guid>
+				<pubDate>Wed, 01 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/installation/2016/06/01/install-ubuntu-virtualbox-mac.html</link>
+				<guid isPermaLink="true">/installation/2016/06/01/install-ubuntu-virtualbox-mac.html</guid>
 			</item>
 		
 	</channel>
