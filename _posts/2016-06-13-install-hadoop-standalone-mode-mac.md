@@ -80,3 +80,14 @@ require 'redcarpet'
 markdown = Redcarpet.new("Hello World!")
 puts markdown.to_html
 ```
+
+```java
+import java.lang.*;
+public class HadoopTest {
+  public static void main (String args[])
+  {
+    System.exit(0);
+  }
+
+}
+```
