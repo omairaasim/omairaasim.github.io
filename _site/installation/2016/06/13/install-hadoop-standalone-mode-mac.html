@@ -177,10 +177,11 @@
 
 <p>The first thing we need to install is java. Run the following command to install Java.</p>
 
-<p><code class="highlighter-rouge">
-  sudo apt-get install openjdk-7-jdk
- </code>
-  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png" alt="&quot;Install Java&quot;" /></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install openjdk-7-jdk
+</code></pre>
+</div>
+
+<p><img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png" alt="&quot;Install Java&quot;" /></p>
 
 <p>Java is successfully installed.
   <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_done_java.png" alt="&quot;Install Java&quot;" /></p>
@@ -189,10 +190,11 @@
 
 <p>Check if Java was successfully installed by typing the following command. You should see the output as shown in the screenshot below.</p>
 
-<p><code class="highlighter-rouge">
-  java -version
- </code>
-  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png" alt="&quot;Test Java Installation&quot;" /></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>java -version
+</code></pre>
+</div>
+
+<p><img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png" alt="&quot;Test Java Installation&quot;" /></p>
 
 <p><strong>Step 3: Finding IP address of Virtual Machine</strong></p>
 
@@ -200,20 +202,22 @@
 
 <p>So in order to connect - we need to know the IP address of the Virtual Machine. To find that out - enter the following command</p>
 
-<p><code class="highlighter-rouge">
-  ifconfig
- </code>
-  You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
+<div class="highlighter-rouge"><pre class="highlight"><code>ifconfig
+</code></pre>
+</div>
+
+<p>You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
   <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png" alt="&quot;ifconfig&quot;" /></p>
 
 <p><strong>Step 4: Using Terminal</strong></p>
 
 <p>Open the Terminal window in your MAC and type the following ssh command. Replace the IP address with what you found in Step 3. Also “hadoop” is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.</p>
 
-<p><code class="highlighter-rouge">
-  ssh hadoop@192.168.1.10
- </code>
-  This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh hadoop@192.168.1.10
+</code></pre>
+</div>
+
+<p>This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.</p>
 
 <p>It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.
   <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step4_Using_terminal.png" alt="&quot;ifconfig&quot;" /></p>
@@ -222,10 +226,11 @@
 
 <p>I am using Hadoop 1.2.1 version here. We can download that from the apache website using the wget command as shown below.</p>
 
-<p><code class="highlighter-rouge">
-  wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
- </code>
-  <img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png" alt="&quot;ifconfig&quot;" /></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+</code></pre>
+</div>
+
+<p><img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png" alt="&quot;ifconfig&quot;" /></p>
 
 <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="s">"Python syntax highlighting123"</span>
 <span class="k">print</span> <span class="n">s</span>

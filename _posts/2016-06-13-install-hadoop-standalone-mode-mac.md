@@ -15,9 +15,10 @@ comments: true
 
   The first thing we need to install is java. Run the following command to install Java.
 
-  ```
-  sudo apt-get install openjdk-7-jdk
-  ```
+```
+sudo apt-get install openjdk-7-jdk
+```
+
   !["Install Java"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png)
 
   Java is successfully installed.
@@ -27,9 +28,10 @@ comments: true
 
   Check if Java was successfully installed by typing the following command. You should see the output as shown in the screenshot below.
 
-  ```
-  java -version
-  ```
+```
+java -version
+```
+
   !["Test Java Installation"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png)
 
   **Step 3: Finding IP address of Virtual Machine**
@@ -38,9 +40,10 @@ comments: true
 
   So in order to connect - we need to know the IP address of the Virtual Machine. To find that out - enter the following command
 
-  ```
-  ifconfig
-  ```
+```
+ifconfig
+```
+
   You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
   !["ifconfig"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png)
 
@@ -48,9 +51,10 @@ comments: true
 
   Open the Terminal window in your MAC and type the following ssh command. Replace the IP address with what you found in Step 3. Also "hadoop" is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.
 
-  ```
-  ssh hadoop@192.168.1.10
-  ```
+```
+ssh hadoop@192.168.1.10
+```
+
   This will give you some authenticity error message - just type "yes" so it will add this IP to your known hosts.
 
   It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.
@@ -60,9 +64,10 @@ comments: true
 
   I am using Hadoop 1.2.1 version here. We can download that from the apache website using the wget command as shown below.
 
-  ```
-  wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
-  ```
+```
+wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+```
+
   !["ifconfig"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png)
 
 ```python

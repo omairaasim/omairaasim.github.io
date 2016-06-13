@@ -14,10 +14,11 @@
 
 &lt;p&gt;The first thing we need to install is java. Run the following command to install Java.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-  sudo apt-get install openjdk-7-jdk
- &lt;/code&gt;
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install openjdk-7-jdk
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_Install_Java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Java is successfully installed.
   &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step1_done_java.png&quot; alt=&quot;&amp;quot;Install Java&amp;quot;&quot; /&gt;&lt;/p&gt;
@@ -26,10 +27,11 @@
 
 &lt;p&gt;Check if Java was successfully installed by typing the following command. You should see the output as shown in the screenshot below.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-  java -version
- &lt;/code&gt;
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png&quot; alt=&quot;&amp;quot;Test Java Installation&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java -version
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step2_Test_java.png&quot; alt=&quot;&amp;quot;Test Java Installation&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 3: Finding IP address of Virtual Machine&lt;/strong&gt;&lt;/p&gt;
 
@@ -37,20 +39,22 @@
 
 &lt;p&gt;So in order to connect - we need to know the IP address of the Virtual Machine. To find that out - enter the following command&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-  ifconfig
- &lt;/code&gt;
-  You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ifconfig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You will see an inet addr: 192.168.1.10 - This is the IP address we will use to connect via Terminal.
   &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step3_ifconfig.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 4: Using Terminal&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Open the Terminal window in your MAC and type the following ssh command. Replace the IP address with what you found in Step 3. Also “hadoop” is the username we created while installing Ubuntu - so if you used a different username - you need to replace that as well.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-  ssh hadoop@192.168.1.10
- &lt;/code&gt;
-  This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh hadoop@192.168.1.10
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will give you some authenticity error message - just type “yes” so it will add this IP to your known hosts.&lt;/p&gt;
 
 &lt;p&gt;It will then prompt you for a password. Again this is the same password we created earlier. Enter your chosen password.
   &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step4_Using_terminal.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
@@ -59,10 +63,11 @@
 
 &lt;p&gt;I am using Hadoop 1.2.1 version here. We can download that from the apache website using the wget command as shown below.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-  wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
- &lt;/code&gt;
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Python syntax highlighting123&quot;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
