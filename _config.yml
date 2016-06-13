@@ -6,7 +6,7 @@ exclude: ["README.md"] # files to exclude
 highlighter: rouge
 markdown: kramdown
 disqus: omairaasim
-google_analytics: dbyll
+google_analytics: UA-26773104-2
 title: Omair Aasim
 
 defaults:
