@@ -96,16 +96,21 @@ comments: true
   &nbsp;  
 !["Network Settings"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step13_Network_settings.png)
 
+  &nbsp;
+
 **Step 14 - Download and select Ubuntu**
 
   Next we need to install Ubuntu on this Virtual machine. Follow these steps.
+
   * First download Ubuntu operating system from [here](https://s3.amazonaws.com/omairaasim.github.io/ubuntu/ubuntu-12.04.3-server-i386.iso)
   * Then back on VirtualBox - click on Settings
   * Click on Storage
   * Click on Empty
   * Click on the small disk next to IDE Secondary Master and select "Choose Virtual Optical Disk File"
+
     &nbsp;
   !["Download and select Ubuntu"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_Select_Ubuntu.png)
+  &nbsp;
 
   * Browse to the folder where you downloaded the Ubuntu operating system and select the iso file - *ubuntu-12.04.3-server-i386.iso*
   * Click on Open.

@@ -69,25 +69,3 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar
 ```
 
   !["ifconfig"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png)
-
-```python
-s = "Python syntax highlighting123"
-print s
-```
-
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
-```
-
-```java
-import java.lang.*;
-public class HadoopTest {
-  public static void main (String args[])
-  {
-    System.exit(0);
-  }
-
-}
-```

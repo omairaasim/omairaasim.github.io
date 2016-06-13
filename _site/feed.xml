@@ -68,28 +68,6 @@
 &lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step5_Download_Hadoop.png&quot; alt=&quot;&amp;quot;ifconfig&amp;quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Python syntax highlighting123&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;redcarpet&#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;markdown&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Redcarpet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;markdown&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_html&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HadoopTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[])&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
 </description>
 				<pubDate>Mon, 13 Jun 2016 00:00:00 +0530</pubDate>
 				<link>/installation/2016/06/13/install-hadoop-standalone-mode-mac.html</link>
@@ -187,18 +165,24 @@
    &lt;br /&gt;
 &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step13_Network_settings.png&quot; alt=&quot;&amp;quot;Network Settings&amp;quot;&quot; /&gt;&lt;/p&gt;
 
+&lt;p&gt; &lt;/p&gt;
+
 &lt;p&gt;&lt;strong&gt;Step 14 - Download and select Ubuntu&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Next we need to install Ubuntu on this Virtual machine. Follow these steps.
-  * First download Ubuntu operating system from &lt;a href=&quot;https://s3.amazonaws.com/omairaasim.github.io/ubuntu/ubuntu-12.04.3-server-i386.iso&quot;&gt;here&lt;/a&gt;
-  * Then back on VirtualBox - click on Settings
-  * Click on Storage
-  * Click on Empty
-  * Click on the small disk next to IDE Secondary Master and select “Choose Virtual Optical Disk File”
-     
-  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_Select_Ubuntu.png&quot; alt=&quot;&amp;quot;Download and select Ubuntu&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Next we need to install Ubuntu on this Virtual machine. Follow these steps.&lt;/p&gt;
 
 &lt;ul&gt;
+  &lt;li&gt;First download Ubuntu operating system from &lt;a href=&quot;https://s3.amazonaws.com/omairaasim.github.io/ubuntu/ubuntu-12.04.3-server-i386.iso&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Then back on VirtualBox - click on Settings&lt;/li&gt;
+  &lt;li&gt;Click on Storage&lt;/li&gt;
+  &lt;li&gt;Click on Empty&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Click on the small disk next to IDE Secondary Master and select “Choose Virtual Optical Disk File”&lt;/p&gt;
+
+    &lt;p&gt; 
+  &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_Select_Ubuntu.png&quot; alt=&quot;&amp;quot;Download and select Ubuntu&amp;quot;&quot; /&gt;
+   &lt;/p&gt;
+  &lt;/li&gt;
   &lt;li&gt;Browse to the folder where you downloaded the Ubuntu operating system and select the iso file - &lt;em&gt;ubuntu-12.04.3-server-i386.iso&lt;/em&gt;&lt;/li&gt;
   &lt;li&gt;Click on Open.
   &lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_1_install_virtualbox_ubuntu/Step14_select_ISO.png&quot; alt=&quot;&amp;quot;Browse iso ubuntu file&amp;quot;&quot; /&gt;&lt;/li&gt;
