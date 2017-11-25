@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Find the top growing companies in Nasdaq using Apache PIG</title>
+	
+	<meta name="description" content="A simple PIG program to calculate the growth rate of companies in a given month.">
+	
+	<meta name="author" content="Omair Aasim">
+
+	<!-- Enable responsive viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Le styles -->
+	<link href="/assets/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/assets/resources/syntax/syntax.css" rel="stylesheet">
+	<link href="/assets/css/style.css" rel="stylesheet">
+
+	<!-- Le fav and touch icons -->
+	<!-- Update these with your own images
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+
+	<link rel="alternate" type="application/rss+xml" title="" href="/feed.xml">
+</head>
+
+<body>
+	<nav class="navbar navbar-default visible-xs" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://github.com/omairaasim">
+				<i class="fa fa-github"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://twitter.com/omairaasim">
+				<i class="fa fa-twitter"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="mailto:omairaasim@gmail.com">
+				<i class="fa fa-envelope"></i>
+			</a>
+			
+			<a class="navbar-brand" href="/">
+				<img src="http://www.gravatar.com/avatar/ded6b2a2d3dcd1039f6fef5313d85cd2?s=35" class="img-circle" />
+				Omair Aasim
+			</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="/categories.html">Categories</a></li>
+				<li><a href="/tags.html">Tags</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+
+	<!-- nav-menu-dropdown -->
+	<div class="btn-group hidden-xs" id="nav-menu">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			<i class="fa fa-bars"></i>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+			<li><a href="/categories.html"><i class="fa fa-folder"></i>Categories</a></li>
+			<li><a href="/tags.html"><i class="fa fa-tags"></i>Tags</a></li>
+			<li class="divider"></li>
+			<li><a href="#"><i class="fa fa-arrow-up"></i>Top of Page</a></li>
+		</ul>
+	</div>
+
+	<div class="col-sm-3 sidebar hidden-xs" style="">
+		<!-- sidebar.html -->
+<header class="sidebar-header" role="banner">
+	<a href="/">
+		<img src="https://s3.amazonaws.com/omairaasim.github.io/images/omairaasim_thumb.jpg?s=150" class="img-circle" />
+	</a>
+	<h3 class="title">
+        <a href="/">Omair Aasim</a>
+    </h3>
+</header>
+
+
+<div id="bio" class="text-center">
+	Software Engineer by profession - Entrepreneur at heart - CoFounder and CTO at DeZyre
+</div>
+
+
+<div id="contact-list" class="text-center">
+	<ul class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://github.com/omairaasim">
+				<i class="fa fa-github-alt fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://twitter.com/omairaasim">
+				<i class="fa fa-twitter fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="mailto:omairaasim@gmail.com">
+				<i class="fa fa-envelope fa-lg"></i>
+			</a>
+		</li>
+		
+	</ul>
+	<ul id="contact-list-secondary" class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://pinterest.com/omairaasim">
+				<i class="fa fa-pinterest fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://linkedin.com/in/omairaasim">
+				<i class="fa fa-linkedin fa-lg"></i>
+			</a>
+		</li>
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="/feed.xml">
+				<i class="fa fa-rss fa-lg"></i>
+			</a>
+		</li>
+	</ul>
+</div>
+<!-- sidebar.html end -->
+
+	</div>
+
+	<div class="col-sm-9 col-sm-offset-3">
+		<div class="page-header">
+  <h1>Find the top growing companies in Nasdaq using Apache PIG </h1>
+</div>
+
+<article>
+
+	<div class="col-sm-10">
+	 <span class="post-date">
+	   
+	   June
+	   20th,
+	   
+	   2016
+	 </span>
+	  <div class="article_body">
+	  <p>In this tutorial, we are going to find out the stock of which companies grew the most in a given month.</p>
+
+<p>If you have not installed PIG - please follow the steps in this tutorial.</p>
+
+<ul>
+  <li><a href="/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html">Installing Apache PIG on MAC OS</a></li>
+</ul>
+
+<p>   <br />
+Lets get started !!!</p>
+
+<p> </p>
+
+<p>Time to move on to some real world cases. This script is using just 1 month of data. We are going to download the Nasdaq data for May 2016 and find out the top 10 companies whose stock grew the most that month.</p>
+
+<p><strong>Step 1: Download the Nasdaq data</strong></p>
+
+<p>There are 2 files here. One is a zip file which contains the daily data and the other file contains the stock symbol and company name.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://s3.amazonaws.com/omairaasim.github.io/data/nasdaq_may_2016.zip
+wget https://s3.amazonaws.com/omairaasim.github.io/data/nasdaq_company_list.csv
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Step 2: Copy the data into HDFS</strong></p>
+
+<p>First lets unzip the file and copy it into HDFS.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mkdir nasdaq
+unzip nasdaq_may_2016.zip -d /home/hadoop/nasdaq/
+</code></pre>
+</div>
+<p> <br />
+If you dont have unzip - install it using</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install unzip
+</code></pre>
+</div>
+
+<p>Now lets copy the files to HDFS</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal /home/hadoop/nasdaq /data/pig/nasdaq/stocks
+hadoop fs -copyFromLocal /home/hadoop/nasdaq_company_list.csv /data/pig/nasdaq
+</code></pre>
+</div>
+
+<p>You can verify if the files are copied using</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -ls /data/pig/nasdaq/stocks
+hadoop fs -ls /data/pig/nasdaq/
+</code></pre>
+</div>
+
+<p><strong>Step 3: Load the data into PIG</strong></p>
+
+<p>Start pig.</p>
+
+<p>In Pig, while loading data - if you just specify the folder name - Pig will upload all the files in that folder. Since we have many daily stock files - we will just specify the folder name to upload data.</p>
+
+<p>Secondly this data contains header row. To skip header row while uploading data, we can use CSVExcelStorage from piggybank.jar</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nasdaq_data = LOAD '/data/pig/nasdaq/stocks' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE','UNIX','SKIP_INPUT_HEADER') AS (symbol:chararray, date:chararray, open:float, high:float,low:float,close:float, volume:long);
+
+nasdaq_company_list = LOAD '/data/pig/nasdaq/nasdaq_company_list.csv' USING PigStorage(',') AS (symbol:chararray, name:chararray);
+</code></pre>
+</div>
+<p> <br />
+The parameters CSVExcelStorage takes are</p>
+
+<ul>
+  <li>Delimiter</li>
+  <li>‘NO_MULTILINE’: used to specify whether fields contain multiple lines.</li>
+  <li>‘UNIX’: used to specify operating system.</li>
+  <li>‘SKIP_INPUT_HEADER’: used to specify if you want to skip the first row.</li>
+</ul>
+
+<p>If we do a dump, we will see the data is in this format</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump nasdaq_data;
+
+(AAAP,17-May-16,28.13,28.76,27.75,27.86,74500)
+(AAL,17-May-16,32.25,33.29,32.02,32.64,13303400)
+(AAME,17-May-16,3.45,3.53,3.31,3.35,5900)
+(AAOI,17-May-16,9.29,9.56,9.17,9.23,379400)
+(AAON,17-May-16,28.27,28.27,27.0,27.24,214400)
+
+</code></pre>
+</div>
+
+<p><strong>Step 4: Filter Data by date</strong></p>
+
+<p>Since we want to calculate the growth - we only need to stock prices of the beginning of the month and end of the month. The beginning of May month starts on May 2nd and ends on 31st May. So we are interested in only these 2 dates.</p>
+
+<p>So lets filter out May 2nd and May 31st data using the FILTER operator. Since we are comparing dates, I’m using the <strong>ToDate</strong> function to convert the chararray to date.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>may2data = FILTER nasdaq_data BY ToDate(date,'dd-MMM-yy') == ToDate('02-May-16','dd-MMM-yy');
+may31data = FILTER nasdaq_data BY ToDate(date,'dd-MMM-yy') == ToDate('31-May-16','dd-MMM-yy');
+</code></pre>
+</div>
+<p> </p>
+
+<p>Lets dump may2data and may31data data to see some if filtering is done correctly</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump may2data;
+
+(ZNGA,2-May-16,2.39,2.4,2.34,2.37,9780600)
+(ZSAN,2-May-16,2.17,2.17,2.01,2.02,3100)
+(ZUMZ,2-May-16,16.89,16.99,16.39,16.66,390000)
+(ZYNE,2-May-16,8.13,8.13,7.6,7.77,112800)
+</code></pre>
+</div>
+
+<p>That looks right. Lets confirm may31data</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump may31data;
+
+(ZN,31-May-16,1.63,1.63,1.56,1.58,21700)
+(ZNGA,31-May-16,2.58,2.6,2.55,2.57,7696500)
+(ZUMZ,31-May-16,14.54,14.98,14.49,14.88,700800)
+(ZYNE,31-May-16,7.75,9.29,7.75,8.74,456200)
+</code></pre>
+</div>
+
+<p>So the filtered data looks good.</p>
+
+<p><strong>Step 5: Perform a Join</strong></p>
+
+<p>Since we need the closing price of both 2nd May and 31st May - lets join these 2 relations.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>join_data = JOIN may2data BY symbol, may31data BY symbol;
+</code></pre>
+</div>
+
+<p>Lets look at the resulting relation.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump join_data;
+
+(WPPGY,2-May-16,116.8,118.33,116.71,118.21,108700,WPPGY,31-May-16,116.89,117.3,115.26,115.93,117800)
+(WTFCM,2-May-16,27.62,27.85,27.47,27.83,12900,WTFCM,31-May-16,28.26,28.3,27.72,28.3,7600)
+(XGTIW,2-May-16,0.11,0.13,0.08,0.13,15200,XGTIW,31-May-16,0.13,0.15,0.11,0.14,37100)
+(ZIONW,2-May-16,2.7,2.7,2.7,2.7,15200,ZIONW,31-May-16,3.0,3.01,2.91,2.91,9100)
+
+</code></pre>
+</div>
+<p> 
+As you can see for each symbol - we have both the 2nd May and 31st data in one tuple.</p>
+
+<p><strong>Step 6: Calculate Growth rate</strong></p>
+
+<p>Next we will calculate the growth rate.</p>
+
+<p>The formula for calculating growth rate is very simple</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>May31st closing price - May 2nd closing price
+--------------------------------------------- * 100
+          May 2nd closing price
+</code></pre>
+</div>
+
+<p>So lets apply that in PIG. Since the column names are same in both relations may2data and may31data - the way we access them is using the disambiguate operator double colon ::</p>
+
+<p>I’m also using the ROUND_TO to round of the result to 2 decimal places.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>growth_rate = FOREACH join_data GENERATE may2data::symbol as symbol,
+ROUND_TO(( ((may31data::close-may2data::close)/may2data::close) * 100),2) AS growth;
+
+</code></pre>
+</div>
+
+<p>Lets Dump this to see the output</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump growth_rate;
+
+(WHLRP,1.17)
+(WHLRW,-20.0)
+(WLRHU,0.76)
+(WLRHW,21.31)
+(WPPGY,-1.93)
+(WTFCM,1.69)
+(XGTIW,7.69)
+(ZIONW,7.78)
+
+</code></pre>
+</div>
+
+<p>We are almost there.</p>
+
+<p> </p>
+
+<p><strong>Step 7: Get the top 10 companies that have grown the most</strong></p>
+
+<p>So in the above step - it shows only the stock symbols. Lets just go 1 step further to get the company names. If you remember in Step 3 we loaded another file nasdaq_company_list which has the company names.</p>
+
+<p>This is how we get the company names.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>join_company_name = JOIN growth_rate BY symbol, nasdaq_company_list BY symbol;
+growth_rate_company = FOREACH join_company_name GENERATE growth_rate::symbol, nasdaq_company_list::name, growth_rate::growth;
+
+</code></pre>
+</div>
+
+<p>Lets dump to see how this looks</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump growth_rate_company;
+
+(WHLRW,"Wheeler Real Estate Investment Trust,-20.0)
+(WPPGY,WPP plc,-1.93)
+(WTFCM,Wintrust Financial Corporation,1.69)
+(XGTIW,"XG Technology,7.69)
+(ZIONW,Zions Bancorporation,7.78)
+
+</code></pre>
+</div>
+
+<p>As you can see - now for each stock symbol - we have the company name.
+ </p>
+
+<p><strong>Step 8: Get the top 10 companies that have grown the most</strong></p>
+
+<p>Next we will find the top 10 companies whose stock has grown the most. This is simple in PIG.</p>
+
+<p>We first order the data by growth and then limit it to 10.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>order_data = ORDER growth_rate_company BY growth DESC;
+top_10 = LIMIT order_data 10;
+</code></pre>
+</div>
+
+<p>Lets dump the data to see</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump top_10;
+
+(SYNC,"Synacor,130.37)
+(CCXI,"ChemoCentryx,126.47)
+(HOVNP,Hovnanian Enterprises Inc,126.04)
+(NSPH,"Nanosphere,117.95)
+(CPXX,Celator Pharmaceuticals Inc.,96.73)
+(NERV,"Minerva Neurosciences,94.62)
+(CLRB,"Cellectar Biosciences,91.18)
+(BOSC,B.O.S. Better Online Solutions,90.19)
+(PTI,"Proteostasis Therapeutics,76.5)
+(AVXS,"AveXis,76.29)
+</code></pre>
+</div>
+
+<p> </p>
+
+<p><strong>Step 9: Save the script</strong></p>
+
+<p>Lets save it as a pride_and_prejudice.pig file</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>STORE order_count INTO '/output/pig/pride_and_prejudice';
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Step 10: Output</strong></p>
+
+<p>The output is saved in the hdfs folder we specified in step 9. To view the results - you can use this command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -cat /output/pig/pride_and_prejudice/part-r-00000
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>elizabeth 633
+jane      293
+collins	  180
+lydia	  170
+kitty	   70
+caroline   17
+george      8
+charles	    7
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Here is the complete script</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pnp_book = LOAD '/data/pig/pride_and_prejudice.txt' AS (lines:chararray);
+tokens = FOREACH pnp_book GENERATE FLATTEN (TOKENIZE(REPLACE(lines, '\'[s]|[\\.;,!:]',''))) AS word;
+character_names = FILTER tokens BY
+                                (
+                                    LOWER(word) matches LOWER('Elizabeth') OR  
+                                    LOWER(word) matches LOWER('Collins') OR
+                                    LOWER(word) matches LOWER('George') OR  
+                                    LOWER(word) matches LOWER('Jane') OR
+                                    LOWER(word) matches LOWER('Lydia') OR  
+                                    LOWER(word) matches LOWER('Caroline') OR
+                                    LOWER(word) matches LOWER('Kitty') OR  
+                                    LOWER(word) matches LOWER('Charles')
+                                );
+group_by_name = GROUP character_names BY LOWER(word);
+count_names = FOREACH group_by_name GENERATE group, COUNT(character_names) as total_count;
+order_count = ORDER count_names BY total_count DESC;
+STORE order_count INTO '/output/pig/pride_and_prejudice';
+</code></pre>
+</div>
+<p> </p>
+
+<p>As you can see - this is nothing but an extension of word count program but we’ve used it to do a simple analysis.</p>
+
+	  </div>
+
+		
+		<ul class="tag_box list-unstyled list-inline">
+		  <li><i class="fa fa-folder-open"></i></li>
+		  
+		  
+			
+				<li><a href="/categories.html#hadoop-tutorials-ref">
+					hadoop-tutorials <span>(7)</span>
+					,
+				</a></li>
+			
+				<li><a href="/categories.html#apache-pig-ref">
+					apache-pig <span>(4)</span>
+					
+				</a></li>
+			
+		  
+		</ul>
+		
+
+		
+		<ul class="list-inline">
+		  <li><i class="fa fa-tags"></i></li>
+		  
+		  
+			
+				<li>
+					<a href="/tags.html#pig-ref">
+					pig <span>(4)</span>
+					
+					</a>
+				</li>
+			
+		  
+		  
+		</ul>
+		
+
+		<hr>
+
+		<div>
+      <section class="share col-sm-6">
+        <h4 class="section-title">Share Post</h4>
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Find the top growing companies in Nasdaq using Apache PIG&via=omairaasim"
+           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+          <i class="fa fa-twitter fa-lg"></i>
+          Twitter
+        </a>
+        <a class="btn btn-default btn-sm facebook" href="https://www.facebook.com/sharer/sharer.php"
+           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+          <i class="fa fa-facebook fa-lg"></i>
+          Facebook
+        </a>
+        <a class="btn btn-default btn-sm gplus"
+           onclick="window.open('https://plus.google.com/share?url='+window.location.href, 'google-plus-share', 'width=490,height=530');return false;">
+          <i class="fa fa-google-plus fa-lg"></i>
+          Google+
+        </a>
+      </section>
+
+    
+    </div>
+
+    <div class="clearfix"></div>
+
+		<ul class="pager">
+		  
+		  <li class="previous"><a href="/hadoop-tutorials/apache-pig/2016/06/17/pride-and-prejudice-casts-pig.html" title="Pride and Prejudice - Find which character is famous using Apache PIG">&larr; Previous</a></li>
+		  
+		  
+			<li class="next disabled"><a>Next &rarr;</a>
+		  
+		</ul>
+
+		<hr>
+	</div>
+
+	<div class="col-sm-2 sidebar-2">
+
+	</div>
+</article>
+<div class="clearfix"></div>
+
+
+
+    
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'omairaasim';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+		
+	</div>
+
+	<script type="text/javascript" src="/assets/resources/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/assets/js/app.js"></script>
+</body>
+</html>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl =
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-26773104-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+

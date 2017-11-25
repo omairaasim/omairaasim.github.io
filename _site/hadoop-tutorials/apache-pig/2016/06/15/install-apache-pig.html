@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Install Apache PIG on MAC OS</title>
+	
+	<meta name="description" content="PIG Installation - Step by step tutorial on how to install PIG on MAC.">
+	
+	<meta name="author" content="Omair Aasim">
+
+	<!-- Enable responsive viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Le styles -->
+	<link href="/assets/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/assets/resources/syntax/syntax.css" rel="stylesheet">
+	<link href="/assets/css/style.css" rel="stylesheet">
+
+	<!-- Le fav and touch icons -->
+	<!-- Update these with your own images
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+
+	<link rel="alternate" type="application/rss+xml" title="" href="/feed.xml">
+</head>
+
+<body>
+	<nav class="navbar navbar-default visible-xs" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://github.com/omairaasim">
+				<i class="fa fa-github"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://twitter.com/omairaasim">
+				<i class="fa fa-twitter"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="mailto:omairaasim@gmail.com">
+				<i class="fa fa-envelope"></i>
+			</a>
+			
+			<a class="navbar-brand" href="/">
+				<img src="http://www.gravatar.com/avatar/ded6b2a2d3dcd1039f6fef5313d85cd2?s=35" class="img-circle" />
+				Omair Aasim
+			</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="/categories.html">Categories</a></li>
+				<li><a href="/tags.html">Tags</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+
+	<!-- nav-menu-dropdown -->
+	<div class="btn-group hidden-xs" id="nav-menu">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			<i class="fa fa-bars"></i>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+			<li><a href="/categories.html"><i class="fa fa-folder"></i>Categories</a></li>
+			<li><a href="/tags.html"><i class="fa fa-tags"></i>Tags</a></li>
+			<li class="divider"></li>
+			<li><a href="#"><i class="fa fa-arrow-up"></i>Top of Page</a></li>
+		</ul>
+	</div>
+
+	<div class="col-sm-3 sidebar hidden-xs" style="">
+		<!-- sidebar.html -->
+<header class="sidebar-header" role="banner">
+	<a href="/">
+		<img src="https://s3.amazonaws.com/omairaasim.github.io/images/omairaasim_thumb.jpg?s=150" class="img-circle" />
+	</a>
+	<h3 class="title">
+        <a href="/">Omair Aasim</a>
+    </h3>
+</header>
+
+
+<div id="bio" class="text-center">
+	Software Engineer by profession - Entrepreneur at heart - CoFounder and CTO at DeZyre
+</div>
+
+
+<div id="contact-list" class="text-center">
+	<ul class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://github.com/omairaasim">
+				<i class="fa fa-github-alt fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://twitter.com/omairaasim">
+				<i class="fa fa-twitter fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="mailto:omairaasim@gmail.com">
+				<i class="fa fa-envelope fa-lg"></i>
+			</a>
+		</li>
+		
+	</ul>
+	<ul id="contact-list-secondary" class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://pinterest.com/omairaasim">
+				<i class="fa fa-pinterest fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://linkedin.com/in/omairaasim">
+				<i class="fa fa-linkedin fa-lg"></i>
+			</a>
+		</li>
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="/feed.xml">
+				<i class="fa fa-rss fa-lg"></i>
+			</a>
+		</li>
+	</ul>
+</div>
+<!-- sidebar.html end -->
+
+	</div>
+
+	<div class="col-sm-9 col-sm-offset-3">
+		<div class="page-header">
+  <h1>Install Apache PIG on MAC OS </h1>
+</div>
+
+<article>
+
+	<div class="col-sm-10">
+	 <span class="post-date">
+	   
+	   June
+	   15th,
+	   
+	   2016
+	 </span>
+	  <div class="article_body">
+	  <p>In this tutorial, we are going to install Apache PIG.</p>
+
+<p>Before you follow this - please follow the steps in these 3 tutorials.</p>
+
+<ul>
+  <li>
+    <p><a href="/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html">Installing Ubuntu on VirtualBox on MAC OS</a></p>
+  </li>
+  <li>
+    <p><a href="/hadoop-tutorials/hadoop-installation/2016/06/03/install-hadoop-standalone-mode-mac.html">Install Hadoop in Standalone mode</a></p>
+  </li>
+  <li>
+    <p><a href="/hadoop-tutorials/hadoop-installation/2016/06/05/install-hadoop-pseudo-distributed-mode-mac.html">Install Hadoop in Pesudo Distributed Mode mode</a></p>
+  </li>
+</ul>
+
+<p> </p>
+
+<p>Lets get started !!!</p>
+
+<p> </p>
+
+<p><strong>Step 1: Download PIG</strong></p>
+
+<p>Let us download the latest release of Apache PIG tar file from <a href="http://www-eu.apache.org/dist/pig/pig-0.16.0/pig-0.16.0.tar.gz">Apache PIG website</a> .</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget http://www-eu.apache.org/dist/pig/pig-0.16.0/pig-0.16.0.tar.gz
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Step 2: Untar the PIG installation file</strong></p>
+
+<p>Use the following command to extract the contents of the tar file</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>tar -xvzf pig-0.16.0.tar.gz
+</code></pre>
+</div>
+
+<p>This will create a folder named pig-0.16.0 in your current folder.</p>
+
+<p> </p>
+
+<p><strong>Step 3: Move the PIG folder into /usr/local/pig</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo cp -r pig-0.16.0 /usr/local/pig
+</code></pre>
+</div>
+
+<p> </p>
+
+<p><strong>Step 4: Inform system location of PIG</strong></p>
+
+<p>We need to edit the bash file to specify the location of PIG. As suggested in the earlier tutorials, it is much easier to use MAC terminal to connect to this virtual machine to make these changes as it allows copy/paste.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo vi /home/hadoop/.bashrc
+</code></pre>
+</div>
+<p> </p>
+
+<p>Then go to the end of the file and paste the following export statements.</p>
+
+<ul>
+  <li>Press i to enable “insert mode”</li>
+  <li>Right click and paste the export statements</li>
+  <li>Press “esc” to exit insert mode</li>
+  <li>Enter :wq to write and quit</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-i386
+export PIG_PREFIX=/usr/local/pig
+export PATH=$PATH:$PIG_PREFIX/bin
+</code></pre>
+</div>
+
+<p><img src="https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/pig/tutorial_1_install_pig/Step4_edit_bashrc_export_statements.png" alt="&quot;location of pig&quot;" /></p>
+
+<p><strong>Step 5: Execute the bash</strong></p>
+
+<p>Next we need to execute the bash for changes to take effect</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>exec bash
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Step 6: Test PIG Installation</strong></p>
+
+<p>Type in pig to see if you enter the grunt mode</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pig
+</code></pre>
+</div>
+
+<p>Thats it !!! We have successfully installed Apache PIG.</p>
+
+	  </div>
+
+		
+		<ul class="tag_box list-unstyled list-inline">
+		  <li><i class="fa fa-folder-open"></i></li>
+		  
+		  
+			
+				<li><a href="/categories.html#hadoop-tutorials-ref">
+					hadoop-tutorials <span>(7)</span>
+					,
+				</a></li>
+			
+				<li><a href="/categories.html#apache-pig-ref">
+					apache-pig <span>(4)</span>
+					
+				</a></li>
+			
+		  
+		</ul>
+		
+
+		
+		<ul class="list-inline">
+		  <li><i class="fa fa-tags"></i></li>
+		  
+		  
+			
+				<li>
+					<a href="/tags.html#installation-ref">
+					installation <span>(4)</span>
+					,
+					</a>
+				</li>
+			
+				<li>
+					<a href="/tags.html#pig-ref">
+					pig <span>(4)</span>
+					
+					</a>
+				</li>
+			
+		  
+		  
+		</ul>
+		
+
+		<hr>
+
+		<div>
+      <section class="share col-sm-6">
+        <h4 class="section-title">Share Post</h4>
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Install Apache PIG on MAC OS&via=omairaasim"
+           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+          <i class="fa fa-twitter fa-lg"></i>
+          Twitter
+        </a>
+        <a class="btn btn-default btn-sm facebook" href="https://www.facebook.com/sharer/sharer.php"
+           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+          <i class="fa fa-facebook fa-lg"></i>
+          Facebook
+        </a>
+        <a class="btn btn-default btn-sm gplus"
+           onclick="window.open('https://plus.google.com/share?url='+window.location.href, 'google-plus-share', 'width=490,height=530');return false;">
+          <i class="fa fa-google-plus fa-lg"></i>
+          Google+
+        </a>
+      </section>
+
+    
+    </div>
+
+    <div class="clearfix"></div>
+
+		<ul class="pager">
+		  
+		  <li class="previous"><a href="/hadoop-tutorials/hadoop-installation/2016/06/05/install-hadoop-pseudo-distributed-mode-mac.html" title="Install Hadoop in Pesudo Distributed mode on MAC OS">&larr; Previous</a></li>
+		  
+		  
+		  <li class="next"><a href="/hadoop-tutorials/apache-pig/2016/06/16/word-count-using-apache-pig.html" title="Word count example doing using Apache PIG">Next &rarr;</a></li>
+		  
+		</ul>
+
+		<hr>
+	</div>
+
+	<div class="col-sm-2 sidebar-2">
+
+	</div>
+</article>
+<div class="clearfix"></div>
+
+
+
+    
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'omairaasim';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+		
+	</div>
+
+	<script type="text/javascript" src="/assets/resources/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/assets/js/app.js"></script>
+</body>
+</html>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl =
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-26773104-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+

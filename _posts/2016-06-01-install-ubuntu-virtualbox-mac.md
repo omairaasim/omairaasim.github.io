@@ -2,7 +2,7 @@
 layout: post
 title: Installing Ubuntu on VirtualBox on MAC OS
 description: Hadoop Installation - Step by step tutorial on how to install Ubuntu on Virtualbox.
-categories: [installation]
+categories: [hadoop-tutorials,hadoop-installation]
 tags: [virtualbox, installation, ubuntu, hadoop installation]
 fullview: false
 comments: true

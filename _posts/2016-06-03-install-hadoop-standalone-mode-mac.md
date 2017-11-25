@@ -2,14 +2,14 @@
 layout: post
 title: Install Hadoop in Standalone mode on MAC OS
 description: Hadoop Installation - Step by step tutorial on how to install Hadoop in stand alone mode.
-categories: [installation]
+categories: [hadoop-tutorials,hadoop-installation]
 tags: [installation, hadoop installation]
 fullview: false
 comments: true
 
 ---
 
-In this tutorial, I am going to show you how to setup Hadoop in stand alone mode. Before you follow this - you have to install Ubuntu on VirtualBox. If you have not done that yet - then please follow this tutorial first - [Installing Ubuntu on VirtualBox on MAC OS](/installation/2016/06/11/install-ubuntu-virtualbox-mac.html)
+In this tutorial, I am going to show you how to setup Hadoop in stand alone mode. Before you follow this - you have to install Ubuntu on VirtualBox. If you have not done that yet - then please follow this tutorial first - [Installing Ubuntu on VirtualBox on MAC OS](/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html)
 
 **Step 1: Install Java**
 
@@ -116,7 +116,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin
 ```
 
   - Press "esc" to exit insert mode
-  - Then press "wq" to write and quit
+  - Then press ":wq" to write and quit
 
 !["Edit bashrc file"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step8_add_export_bash.png)
 
@@ -129,8 +129,7 @@ Run the command
 ```
 exec bash
 ```
-
-!["Exec bashrc file"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step12_exec_bash.png)
+&nbsp;  
 
 **Step 10: Setup Java location in Hadoop**
 
@@ -149,7 +148,7 @@ export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-i386
 ```
 
 - Press "esc" to exit insert mode
-- Press "wq" to write and quit
+- Press ":wq" to write and quit
 
 !["Specify JAVA_HOME"](https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step10_uncomment_java.png)
 

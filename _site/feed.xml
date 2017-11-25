@@ -7,8 +7,1251 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Find the top growing companies in Nasdaq using Apache PIG</title>
+				<description>&lt;p&gt;In this tutorial, we are going to find out the stock of which companies grew the most in a given month.&lt;/p&gt;
+
+&lt;p&gt;If you have not installed PIG - please follow the steps in this tutorial.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html&quot;&gt;Installing Apache PIG on MAC OS&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;   &lt;br /&gt;
+Lets get started !!!&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Time to move on to some real world cases. This script is using just 1 month of data. We are going to download the Nasdaq data for May 2016 and find out the top 10 companies whose stock grew the most that month.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1: Download the Nasdaq data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;There are 2 files here. One is a zip file which contains the daily data and the other file contains the stock symbol and company name.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://s3.amazonaws.com/omairaasim.github.io/data/nasdaq_may_2016.zip
+wget https://s3.amazonaws.com/omairaasim.github.io/data/nasdaq_company_list.csv
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2: Copy the data into HDFS&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First lets unzip the file and copy it into HDFS.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir nasdaq
+unzip nasdaq_may_2016.zip -d /home/hadoop/nasdaq/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;br /&gt;
+If you dont have unzip - install it using&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install unzip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now lets copy the files to HDFS&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -copyFromLocal /home/hadoop/nasdaq /data/pig/nasdaq/stocks
+hadoop fs -copyFromLocal /home/hadoop/nasdaq_company_list.csv /data/pig/nasdaq
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can verify if the files are copied using&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -ls /data/pig/nasdaq/stocks
+hadoop fs -ls /data/pig/nasdaq/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Load the data into PIG&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Start pig.&lt;/p&gt;
+
+&lt;p&gt;In Pig, while loading data - if you just specify the folder name - Pig will upload all the files in that folder. Since we have many daily stock files - we will just specify the folder name to upload data.&lt;/p&gt;
+
+&lt;p&gt;Secondly this data contains header row. To skip header row while uploading data, we can use CSVExcelStorage from piggybank.jar&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nasdaq_data = LOAD &#39;/data/pig/nasdaq/stocks&#39; USING org.apache.pig.piggybank.storage.CSVExcelStorage(&#39;,&#39;,&#39;NO_MULTILINE&#39;,&#39;UNIX&#39;,&#39;SKIP_INPUT_HEADER&#39;) AS (symbol:chararray, date:chararray, open:float, high:float,low:float,close:float, volume:long);
+
+nasdaq_company_list = LOAD &#39;/data/pig/nasdaq/nasdaq_company_list.csv&#39; USING PigStorage(&#39;,&#39;) AS (symbol:chararray, name:chararray);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;br /&gt;
+The parameters CSVExcelStorage takes are&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Delimiter&lt;/li&gt;
+  &lt;li&gt;‘NO_MULTILINE’: used to specify whether fields contain multiple lines.&lt;/li&gt;
+  &lt;li&gt;‘UNIX’: used to specify operating system.&lt;/li&gt;
+  &lt;li&gt;‘SKIP_INPUT_HEADER’: used to specify if you want to skip the first row.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If we do a dump, we will see the data is in this format&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump nasdaq_data;
+
+(AAAP,17-May-16,28.13,28.76,27.75,27.86,74500)
+(AAL,17-May-16,32.25,33.29,32.02,32.64,13303400)
+(AAME,17-May-16,3.45,3.53,3.31,3.35,5900)
+(AAOI,17-May-16,9.29,9.56,9.17,9.23,379400)
+(AAON,17-May-16,28.27,28.27,27.0,27.24,214400)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Filter Data by date&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Since we want to calculate the growth - we only need to stock prices of the beginning of the month and end of the month. The beginning of May month starts on May 2nd and ends on 31st May. So we are interested in only these 2 dates.&lt;/p&gt;
+
+&lt;p&gt;So lets filter out May 2nd and May 31st data using the FILTER operator. Since we are comparing dates, I’m using the &lt;strong&gt;ToDate&lt;/strong&gt; function to convert the chararray to date.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;may2data = FILTER nasdaq_data BY ToDate(date,&#39;dd-MMM-yy&#39;) == ToDate(&#39;02-May-16&#39;,&#39;dd-MMM-yy&#39;);
+may31data = FILTER nasdaq_data BY ToDate(date,&#39;dd-MMM-yy&#39;) == ToDate(&#39;31-May-16&#39;,&#39;dd-MMM-yy&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Lets dump may2data and may31data data to see some if filtering is done correctly&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump may2data;
+
+(ZNGA,2-May-16,2.39,2.4,2.34,2.37,9780600)
+(ZSAN,2-May-16,2.17,2.17,2.01,2.02,3100)
+(ZUMZ,2-May-16,16.89,16.99,16.39,16.66,390000)
+(ZYNE,2-May-16,8.13,8.13,7.6,7.77,112800)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That looks right. Lets confirm may31data&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump may31data;
+
+(ZN,31-May-16,1.63,1.63,1.56,1.58,21700)
+(ZNGA,31-May-16,2.58,2.6,2.55,2.57,7696500)
+(ZUMZ,31-May-16,14.54,14.98,14.49,14.88,700800)
+(ZYNE,31-May-16,7.75,9.29,7.75,8.74,456200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So the filtered data looks good.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Perform a Join&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Since we need the closing price of both 2nd May and 31st May - lets join these 2 relations.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;join_data = JOIN may2data BY symbol, may31data BY symbol;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lets look at the resulting relation.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump join_data;
+
+(WPPGY,2-May-16,116.8,118.33,116.71,118.21,108700,WPPGY,31-May-16,116.89,117.3,115.26,115.93,117800)
+(WTFCM,2-May-16,27.62,27.85,27.47,27.83,12900,WTFCM,31-May-16,28.26,28.3,27.72,28.3,7600)
+(XGTIW,2-May-16,0.11,0.13,0.08,0.13,15200,XGTIW,31-May-16,0.13,0.15,0.11,0.14,37100)
+(ZIONW,2-May-16,2.7,2.7,2.7,2.7,15200,ZIONW,31-May-16,3.0,3.01,2.91,2.91,9100)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; 
+As you can see for each symbol - we have both the 2nd May and 31st data in one tuple.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6: Calculate Growth rate&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we will calculate the growth rate.&lt;/p&gt;
+
+&lt;p&gt;The formula for calculating growth rate is very simple&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;May31st closing price - May 2nd closing price
+--------------------------------------------- * 100
+          May 2nd closing price
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So lets apply that in PIG. Since the column names are same in both relations may2data and may31data - the way we access them is using the disambiguate operator double colon ::&lt;/p&gt;
+
+&lt;p&gt;I’m also using the ROUND_TO to round of the result to 2 decimal places.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;growth_rate = FOREACH join_data GENERATE may2data::symbol as symbol,
+ROUND_TO(( ((may31data::close-may2data::close)/may2data::close) * 100),2) AS growth;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lets Dump this to see the output&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump growth_rate;
+
+(WHLRP,1.17)
+(WHLRW,-20.0)
+(WLRHU,0.76)
+(WLRHW,21.31)
+(WPPGY,-1.93)
+(WTFCM,1.69)
+(XGTIW,7.69)
+(ZIONW,7.78)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We are almost there.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7: Get the top 10 companies that have grown the most&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;So in the above step - it shows only the stock symbols. Lets just go 1 step further to get the company names. If you remember in Step 3 we loaded another file nasdaq_company_list which has the company names.&lt;/p&gt;
+
+&lt;p&gt;This is how we get the company names.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;join_company_name = JOIN growth_rate BY symbol, nasdaq_company_list BY symbol;
+growth_rate_company = FOREACH join_company_name GENERATE growth_rate::symbol, nasdaq_company_list::name, growth_rate::growth;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lets dump to see how this looks&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump growth_rate_company;
+
+(WHLRW,&quot;Wheeler Real Estate Investment Trust,-20.0)
+(WPPGY,WPP plc,-1.93)
+(WTFCM,Wintrust Financial Corporation,1.69)
+(XGTIW,&quot;XG Technology,7.69)
+(ZIONW,Zions Bancorporation,7.78)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;As you can see - now for each stock symbol - we have the company name.
+ &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 8: Get the top 10 companies that have grown the most&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we will find the top 10 companies whose stock has grown the most. This is simple in PIG.&lt;/p&gt;
+
+&lt;p&gt;We first order the data by growth and then limit it to 10.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;order_data = ORDER growth_rate_company BY growth DESC;
+top_10 = LIMIT order_data 10;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lets dump the data to see&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump top_10;
+
+(SYNC,&quot;Synacor,130.37)
+(CCXI,&quot;ChemoCentryx,126.47)
+(HOVNP,Hovnanian Enterprises Inc,126.04)
+(NSPH,&quot;Nanosphere,117.95)
+(CPXX,Celator Pharmaceuticals Inc.,96.73)
+(NERV,&quot;Minerva Neurosciences,94.62)
+(CLRB,&quot;Cellectar Biosciences,91.18)
+(BOSC,B.O.S. Better Online Solutions,90.19)
+(PTI,&quot;Proteostasis Therapeutics,76.5)
+(AVXS,&quot;AveXis,76.29)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 9: Save the script&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets save it as a pride_and_prejudice.pig file&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STORE order_count INTO &#39;/output/pig/pride_and_prejudice&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 10: Output&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The output is saved in the hdfs folder we specified in step 9. To view the results - you can use this command.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -cat /output/pig/pride_and_prejudice/part-r-00000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;elizabeth 633
+jane      293
+collins	  180
+lydia	  170
+kitty	   70
+caroline   17
+george      8
+charles	    7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Here is the complete script&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pnp_book = LOAD &#39;/data/pig/pride_and_prejudice.txt&#39; AS (lines:chararray);
+tokens = FOREACH pnp_book GENERATE FLATTEN (TOKENIZE(REPLACE(lines, &#39;\&#39;[s]|[\\.;,!:]&#39;,&#39;&#39;))) AS word;
+character_names = FILTER tokens BY
+                                (
+                                    LOWER(word) matches LOWER(&#39;Elizabeth&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Collins&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;George&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Jane&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;Lydia&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Caroline&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;Kitty&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Charles&#39;)
+                                );
+group_by_name = GROUP character_names BY LOWER(word);
+count_names = FOREACH group_by_name GENERATE group, COUNT(character_names) as total_count;
+order_count = ORDER count_names BY total_count DESC;
+STORE order_count INTO &#39;/output/pig/pride_and_prejudice&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;As you can see - this is nothing but an extension of word count program but we’ve used it to do a simple analysis.&lt;/p&gt;
+</description>
+				<pubDate>Mon, 20 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/hadoop-tutorials/apache-pig/2016/06/20/top-growing-nasdaq-companies-pig.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/apache-pig/2016/06/20/top-growing-nasdaq-companies-pig.html</guid>
+			</item>
+		
+			<item>
+				<title>Pride and Prejudice - Find which character is famous using Apache PIG</title>
+				<description>&lt;p&gt;In this tutorial, we are going to take the simple word count example and spice it up. We are going to use Apache PIG to determine the number of times each characters name has appeared in the book pride and prejudice.&lt;/p&gt;
+
+&lt;p&gt;If you have not installed PIG - please follow the steps in this tutorial.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html&quot;&gt;Installing Apache PIG on MAC OS&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;   &lt;br /&gt;
+Lets get started !!!&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Just for reference, these are the main characters we are going to look for. I’m going by their first names.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Catherine&lt;/li&gt;
+  &lt;li&gt;Elizabeth&lt;/li&gt;
+  &lt;li&gt;Collins&lt;/li&gt;
+  &lt;li&gt;George&lt;/li&gt;
+  &lt;li&gt;Jane&lt;/li&gt;
+  &lt;li&gt;Lydia&lt;/li&gt;
+  &lt;li&gt;Caroline&lt;/li&gt;
+  &lt;li&gt;Kitty&lt;/li&gt;
+  &lt;li&gt;Charles&lt;br /&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1: Download the book&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://s3.amazonaws.com/omairaasim.github.io/data/pride_and_prejudice.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2: Copy the book into HDFS&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -copyFromLocal /home/hadoop/pride_and_prejudice.txt /data/pig/pride_and_prejudice.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Load the data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Start pig and load the data&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pnp_book = LOAD &#39;/data/pig/pride_and_prejudice.txt&#39; AS (lines:chararray);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Tokenize the data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets tokenize and flatten the data so we get one word in each line. Also in this step - I’m replacing all punctuation marks and (“’s’”). If we don’t do that, then when we tokenize - these 3 would be considered as separate tokens&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Elizabeth&lt;/li&gt;
+  &lt;li&gt;Elizabeth.&lt;/li&gt;
+  &lt;li&gt;Elizabeth’s&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tokens = FOREACH pnp_book GENERATE FLATTEN (TOKENIZE(REPLACE(lines, &#39;\&#39;[s]|[\\.;,!:]&#39;,&#39;&#39;))) AS word;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Filter the data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;character_names = FILTER tokens BY
+                                (
+                                    LOWER(word) matches LOWER(&#39;Elizabeth&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Collins&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;George&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Jane&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;Lydia&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Caroline&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;Kitty&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Charles&#39;)
+                                );
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6: Group the words together&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we will group the words&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;group_by_name = GROUP character_names BY LOWER(word);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7: Count the occurrences&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we will count the number of times each character name has occurred&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;count_names = FOREACH group_by_name GENERATE group, COUNT(character_names) as total_count;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 8: Order by max count&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;order_count = ORDER count_names BY total_count DESC;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 9: Save the script&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets save it as a pride_and_prejudice.pig file&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STORE order_count INTO &#39;/output/pig/pride_and_prejudice&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 10: Output&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The output is saved in the hdfs folder we specified in step 9. To view the results - you can use this command.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -cat /output/pig/pride_and_prejudice/part-r-00000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;elizabeth 633
+jane      293
+collins	  180
+lydia	  170
+kitty	   70
+caroline   17
+george      8
+charles	    7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Here is the complete script&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pnp_book = LOAD &#39;/data/pig/pride_and_prejudice.txt&#39; AS (lines:chararray);
+tokens = FOREACH pnp_book GENERATE FLATTEN (TOKENIZE(REPLACE(lines, &#39;\&#39;[s]|[\\.;,!:]&#39;,&#39;&#39;))) AS word;
+character_names = FILTER tokens BY
+                                (
+                                    LOWER(word) matches LOWER(&#39;Elizabeth&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Collins&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;George&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Jane&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;Lydia&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Caroline&#39;) OR
+                                    LOWER(word) matches LOWER(&#39;Kitty&#39;) OR  
+                                    LOWER(word) matches LOWER(&#39;Charles&#39;)
+                                );
+group_by_name = GROUP character_names BY LOWER(word);
+count_names = FOREACH group_by_name GENERATE group, COUNT(character_names) as total_count;
+order_count = ORDER count_names BY total_count DESC;
+STORE order_count INTO &#39;/output/pig/pride_and_prejudice&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;As you can see - this is nothing but an extension of word count program but we’ve used it to do a simple analysis.&lt;/p&gt;
+</description>
+				<pubDate>Fri, 17 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/hadoop-tutorials/apache-pig/2016/06/17/pride-and-prejudice-casts-pig.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/apache-pig/2016/06/17/pride-and-prejudice-casts-pig.html</guid>
+			</item>
+		
+			<item>
+				<title>Word count example doing using Apache PIG</title>
+				<description>&lt;p&gt;In this tutorial, we are going to do the word count example using Apache PIG.&lt;/p&gt;
+
+&lt;p&gt;If you have not installed PIG - please follow the steps in this tutorial.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html&quot;&gt;Installing Apache PIG on MAC OS&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;   &lt;br /&gt;
+Lets get started !!!&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1: Create a sample file to do word count&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First lets create a sample file to do the word count. I am going to use the vi editor to create a file called wordcount.txt. As sugggested in earlier tutorials - I am using MAC Terminal to connect to the virtual machine.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /home/hadoop/word_count.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Then press “i” to enable insert mode&lt;/li&gt;
+  &lt;li&gt;Copy/paste the following lines&lt;br /&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apache pig was invented by yahoo
+pig is a data flow language
+using pig language we can process any data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Then press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Finally press “:wq” to write and quit&lt;br /&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2: Copy the file to HDFS&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Use the following command to copy the file into HDFS. I’m creating a new directory /data/pig to store the pig example files.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -copyFromLocal /home/hadoop/word_count.txt /data/pig/word_count.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;You can verify if the file has been copied to HDFS by running the command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -ls /data/pig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Invoke PIG&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This will take you to the grunt prompt.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Load the data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First step is to load the data from the file. We use the load command for that purpose.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;all_lines = load &#39;/data/pig/word_count.txt&#39; as (lines:chararray);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;br /&gt;
+Lets describe this relation&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;describe all_lines;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;br /&gt;
+The out put will be&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;all_lines: {lines: chararray}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This is interpreted as all_lines is name of relation. It contains 1 field &lt;em&gt;lines&lt;/em&gt; of type chararray.&lt;/p&gt;
+
+&lt;p&gt; &lt;br /&gt;
+Since this is our first example - lets look at how the data looks. Run the dump command which will run a map reduce program to show the output.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dump all_lines;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;br /&gt;
+You will see 3 tuples&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(apache pig was invented by yahoo)
+(pig is a data flow language)
+(using pig language we can process any data)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Tokenize the data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;FOREACH…GENERATE&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;This is like our standard looping. It is used to act on every row in a relation. Since we want to take each line and tokenize it, we will be using FOREACH…GENERATE to loop through each of the lines in the file.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;TOKENIZE&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;We need to tokenize each line into separate word. We can use the built in TOKENIZE function.
+This function will split on whitespace and each result is placed in its own tuple and all tuples are placed in a bag.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;FLATTEN&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;If we want to remove nesting and elevate each field to a top level field, we can use the FLATTEN modifier.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;To understand this - lets run these two examples to see the difference in output.
+ &lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;words_without_flatten = FOREACH all_lines GENERATE TOKENIZE(lines) as word;
+dump words_without_flatten;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;The output will be as shown&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;({(apache),(pig),(was),(invented),(by),(yahoo)})
+({(pig),(is),(a),(data),(flow),(language)})
+({(using),(pig),(language),(we),(can),(process),(any),(data)})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;As you can see, the TOKENIZE function has split the lines into single words and placed each word into its own tuple and all tuples are placed in a bag for a single line.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Lets see how the data looks if we run the same command with FLATTEN modifier.
+ &lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;words_with_flatten = FOREACH all_lines GENERATE FLATTEN(TOKENIZE(lines)) as word;
+dump words_with_flatten;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Here you can see - each word has been elevated to a top level tuple. For doing word count - data in this format is more useful to use so we can group it as shown in next step.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(apache)
+(pig)
+(was)
+(invented)
+(by)
+(yahoo)
+(pig)
+(is)
+(a)
+(data)
+(flow)
+(language)
+(using)
+(pig)
+(language)
+(we)
+(can)
+(process)
+(any)
+(data)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Lets describe this relation&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;describe words_with_flatten;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;br /&gt;
+This is the output. The relation &lt;em&gt;words_with_flatten&lt;/em&gt; has 1 field word of type chararray.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;words_with_flatten: {word: chararray}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6: Apply GROUP…BY&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;As the name suggest, the GROUP…BY statement is used to group the data in a single relation.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grouped_words = GROUP words_with_flatten BY word;
+dump grouped_words;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;In the output for each word, it will show a bag containing tuples corresponding to the number of times the word occurred. For example, the word pig occurred 3 times - so you can see a bag containing 3 tuples of word pig.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(a,{(a)})
+(by,{(by)})
+(is,{(is)})
+(we,{(we)})
+(any,{(any)})
+(can,{(can)})
+(pig,{(pig),(pig),(pig)})
+(was,{(was)})
+(data,{(data),(data)})
+(flow,{(flow)})
+(using,{(using)})
+(yahoo,{(yahoo)})
+(apache,{(apache)})
+(process,{(process)})
+(invented,{(invented)})
+(language,{(language),(language)})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Lets describe this relation.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;describe grouped_words;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;br /&gt;
+This is the output. This means the relation grouped_words has 2 fields, &lt;em&gt;group&lt;/em&gt; (the name PIG assigns by default to the group by field) and a bag &lt;em&gt;words_with_flatten&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grouped_words: {group: chararray,words_with_flatten: {(word: chararray)}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If you notice the first field is the grouping field and by default PIG gives it an alias &lt;em&gt;group&lt;/em&gt;.
+The second field is a bag containing the grouped fields which has the same schema as the original relation.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7: Count the words&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The last step is pretty easy. We have to iterate through the loop and for each word, count the number of tuples.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;word_count = FOREACH grouped_words GENERATE group as Word, COUNT(words_with_flatten) AS WordCount;
+dump word_count;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The output is&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(a,1)
+(by,1)
+(is,1)
+(we,1)
+(any,1)
+(can,1)
+(pig,3)
+(was,1)
+(data,2)
+(flow,1)
+(using,1)
+(yahoo,1)
+(apache,1)
+(process,1)
+(invented,1)
+(language,2)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Thats the result of our word count program.&lt;/p&gt;
+
+&lt;p&gt;To exit grunt , type quit.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 8: Lets put all together&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Rather than executing one line at a time in grunt prompt - we can save the entire script in a file and run it. We can also save the output in a file.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create wordcount.pig file&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /home/hadoop/wordcount.pig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Copy paste the code below and save it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;all_lines = LOAD &#39;/data/pig/word_count.txt&#39; AS (lines:chararray);
+words_with_flatten = FOREACH all_lines GENERATE FLATTEN(TOKENIZE(lines)) AS word;
+grouped_words = GROUP words_with_flatten BY word;
+word_count = FOREACH grouped_words GENERATE group AS Word, COUNT(words_with_flatten) AS WordCount;
+STORE word_count INTO &#39;/output/pig/wordcount&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run the script as follows&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pig /home/hadoop/wordcount.pig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Check the output&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop fs -cat /output/pig/wordcount/part-r-00000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Hope you enjoyed this tutorial. Word count is like the Hello World equivalent of PIG :)&lt;/p&gt;
+</description>
+				<pubDate>Thu, 16 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/hadoop-tutorials/apache-pig/2016/06/16/word-count-using-apache-pig.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/apache-pig/2016/06/16/word-count-using-apache-pig.html</guid>
+			</item>
+		
+			<item>
+				<title>Install Apache PIG on MAC OS</title>
+				<description>&lt;p&gt;In this tutorial, we are going to install Apache PIG.&lt;/p&gt;
+
+&lt;p&gt;Before you follow this - please follow the steps in these 3 tutorials.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html&quot;&gt;Installing Ubuntu on VirtualBox on MAC OS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;/hadoop-tutorials/hadoop-installation/2016/06/03/install-hadoop-standalone-mode-mac.html&quot;&gt;Install Hadoop in Standalone mode&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;/hadoop-tutorials/hadoop-installation/2016/06/05/install-hadoop-pseudo-distributed-mode-mac.html&quot;&gt;Install Hadoop in Pesudo Distributed Mode mode&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Lets get started !!!&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1: Download PIG&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Let us download the latest release of Apache PIG tar file from &lt;a href=&quot;http://www-eu.apache.org/dist/pig/pig-0.16.0/pig-0.16.0.tar.gz&quot;&gt;Apache PIG website&lt;/a&gt; .&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://www-eu.apache.org/dist/pig/pig-0.16.0/pig-0.16.0.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2: Untar the PIG installation file&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Use the following command to extract the contents of the tar file&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tar -xvzf pig-0.16.0.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will create a folder named pig-0.16.0 in your current folder.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Move the PIG folder into /usr/local/pig&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo cp -r pig-0.16.0 /usr/local/pig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Inform system location of PIG&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We need to edit the bash file to specify the location of PIG. As suggested in the earlier tutorials, it is much easier to use MAC terminal to connect to this virtual machine to make these changes as it allows copy/paste.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /home/hadoop/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Then go to the end of the file and paste the following export statements.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press i to enable “insert mode”&lt;/li&gt;
+  &lt;li&gt;Right click and paste the export statements&lt;/li&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Enter :wq to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-i386
+export PIG_PREFIX=/usr/local/pig
+export PATH=$PATH:$PIG_PREFIX/bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/pig/tutorial_1_install_pig/Step4_edit_bashrc_export_statements.png&quot; alt=&quot;&amp;quot;location of pig&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Execute the bash&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we need to execute the bash for changes to take effect&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;exec bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6: Test PIG Installation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Type in pig to see if you enter the grunt mode&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Thats it !!! We have successfully installed Apache PIG.&lt;/p&gt;
+</description>
+				<pubDate>Wed, 15 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html</guid>
+			</item>
+		
+			<item>
+				<title>Install Hadoop in Pesudo Distributed mode on MAC OS</title>
+				<description>&lt;p&gt;In this tutorial, we are going to setup Hadoop in Pseudo Distributed mode.&lt;/p&gt;
+
+&lt;p&gt;Before you follow this - please follow the steps in these 2 tutorials.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html&quot;&gt;Installing Ubuntu on VirtualBox on MAC OS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;/hadoop-tutorials/hadoop-installation/2016/06/03/install-hadoop-standalone-mode-mac.html&quot;&gt;Install Hadoop in Standalone mode&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;So what is Pesudo Distributed Mode?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To give you a little background - in Hadoop there are 5 services namely&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NameNode&lt;/li&gt;
+  &lt;li&gt;DataNode&lt;/li&gt;
+  &lt;li&gt;JobTracker&lt;/li&gt;
+  &lt;li&gt;TaskTracker&lt;/li&gt;
+  &lt;li&gt;Secondary NameNode&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So in Standalone mode - all these 5 services run on a single JVM and no HDFS is created.&lt;/p&gt;
+
+&lt;p&gt;In Pseudo Distributed mode - each Hadoop service runs on a separate JVM and HDFS is created.&lt;/p&gt;
+
+&lt;p&gt;So in order to setup Hadoop in Pesudo Distributed mode - we need to configure all 5 services and HDFS.&lt;/p&gt;
+
+&lt;p&gt;Lets get started !!!&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1: Find IP address&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Run the command below to find the IP address of your virtual machine.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ifconfig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Note the value of inet addr. In my case this value is &lt;em&gt;192.168.1.19&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step1_Get_IP_new.png&quot; alt=&quot;&amp;quot;Get IP Address&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;br /&gt;
+&lt;strong&gt;Step 2: Connect via Terminal&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;As mentioned in the earlier tutorials - its much easier to work with Terminal. So fire up your terminal and connect to your Virtual Machine using your username/password and IP address from STEP 1.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh hadoop@192.168.1.19
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step2_connect_via_terminal_new.png&quot; alt=&quot;&amp;quot;Connect via Terminal&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Setup NameNode service&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In core-site.xml, we need to specify the value for these 2 properties&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;fs.default.name&lt;/em&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Location to run Namenode service.&lt;/li&gt;
+      &lt;li&gt;Specify the IP address of your machine&lt;/li&gt;
+      &lt;li&gt;Standard practice is to give port number 10001.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;hadoop.tmp.dir&lt;/em&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Temporary directory for HDFS&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Open core-site.xml in vi editor using the following command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /usr/local/hadoop/conf/core-site.xml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press i to enable insert mode&lt;/li&gt;
+  &lt;li&gt;Paste the following between the &lt;em&gt;configuration&lt;/em&gt; tags.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;fs.default.name&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;hdfs://192.168.1.19:10001&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hadoop.tmp.dir&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;/usr/local/hadoop/hdfs&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Enter :wq to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step3_configure_namenode_service_new.png&quot; alt=&quot;&amp;quot;configure Namenode&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Setup JobTracker service&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In mapred-site.xml, we need to specify the value for this property&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;mapred.job.tracker&lt;/em&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Location to run JobTracker service.&lt;/li&gt;
+      &lt;li&gt;Specify the IP address of your machine&lt;/li&gt;
+      &lt;li&gt;Standard practice is to give port number 10002&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Open mapred-site.xml in vi editor using the following command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /usr/local/hadoop/conf/mapred-site.xml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press i to enable insert mode&lt;/li&gt;
+  &lt;li&gt;Paste the following between the &lt;em&gt;configuration&lt;/em&gt; tags.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;mapred.job.tracker&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;hdfs://192.168.1.19:10002&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Enter :wq to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step4_configure_jobtracker_service_new.png&quot; alt=&quot;&amp;quot;configure JobTracker&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Setup DataNode and TaskTracker service&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Open “slaves” file in vi editor using the following command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /usr/local/hadoop/conf/slaves
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press i to enable insert mode&lt;/li&gt;
+  &lt;li&gt;Enter the IP address of your machine&lt;/li&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Enter :wq to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step5_configure_datanode_tasktracker_new.png&quot; alt=&quot;&amp;quot;configure DataNode and TaskTracker&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6: Setup Secondary NameNode service&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Open “masters” file in vi editor using the following command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo vi /usr/local/hadoop/conf/masters
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Press i to enable insert mode&lt;/li&gt;
+  &lt;li&gt;Enter the IP address of your machine&lt;/li&gt;
+  &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
+  &lt;li&gt;Enter :wq to write and quit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step6_configure_secondary_namenode_new.png&quot; alt=&quot;&amp;quot;configure DataNode and TaskTracker&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7: Create HDFS folder&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Create a folder called hdfs, which will act as HDFS file system for your Hadoop setup&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo mkdir /usr/local/hadoop/hdfs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 8: Assign permissions to Hadoop folders&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Assign the permissions of all hadoop folders to the user “hadoop”. Incase you created a different username - then change the command accordingly.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo chown hadoop /usr/local/hadoop
+sudo chown hadoop /usr/local/hadoop/bin
+sudo chown hadoop /usr/local/hadoop/lib
+sudo chown hadoop /usr/local/hadoop/conf
+sudo chown hadoop /usr/local/hadoop/hdfs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 9: Format NameNode&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop namenode -format
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step9_format_namenode_new.png&quot; alt=&quot;&amp;quot;format NameNode&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 10: Create password less setup for calling Hadoop services&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Run this command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-keygen
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It will ask you 3 questions - simply Press “ENTER” for each&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Enter file in which to save the key&lt;/li&gt;
+  &lt;li&gt;Enter passphrase&lt;/li&gt;
+  &lt;li&gt;Enter same passphrase again&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step10_ssh_keygen_new.png&quot; alt=&quot;&amp;quot;ssh keygen&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then enter the following command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cat /home/hadoop/.ssh/id_rsa.pub &amp;gt; /home/hadoop/.ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 11: Start Hadoop services&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We are all ready to start the hadoop services. Run the command below&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;start-all.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;It may prompt you that the authenticity of your IP cant be established. Do you want to continue - simply type “yes”&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step11_start_hadoop_services_new.png&quot; alt=&quot;&amp;quot;start hadoop services&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 12: Check if all services have started&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the moment of truth. We need to check if all 5 Hadoop services have started.&lt;/p&gt;
+
+&lt;p&gt;To check that - run the command below&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jps
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You should see the 5 services NameNode, DataNode, JobTracker, TaskTracker and SecondaryNameNode running as shown below.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_3_install_hadoop_pseudo_distributed_mode/Step12_hadoop_services_running_new.png&quot; alt=&quot;&amp;quot;hadoop services running&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;congratulations--you-have-successfully-setup-hadoop-in-pseudo-distributed-mode&quot;&gt;Congratulations !!! You have successfully setup Hadoop in Pseudo Distributed mode.&lt;/h3&gt;
+
+&lt;p&gt;Some important notes&lt;/p&gt;
+
+&lt;p&gt;To stop hadoop services&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;stop-all.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;If you dont see NameNode service running (Note: formatting namenode will delete all data)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hadoop namenode -format
+start-all.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Web URL’s for accessing the services (Replace with your IP)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NameNode: http://192.168.1.19:50070/&lt;/li&gt;
+  &lt;li&gt;DataNode: Can be accessed by going to NameNode and clicking on Browse File system&lt;/li&gt;
+  &lt;li&gt;JobTracker: http://192.168.1.19:50030/&lt;/li&gt;
+  &lt;li&gt;TaskTracker: http://192.168.1.19:50060/&lt;/li&gt;
+  &lt;li&gt;SecondaryNameNode: http://192.168.1.19:50090/&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Sun, 05 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/hadoop-tutorials/hadoop-installation/2016/06/05/install-hadoop-pseudo-distributed-mode-mac.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/hadoop-installation/2016/06/05/install-hadoop-pseudo-distributed-mode-mac.html</guid>
+			</item>
+		
+			<item>
 				<title>Install Hadoop in Standalone mode on MAC OS</title>
-				<description>&lt;p&gt;In this tutorial, I am going to show you how to setup Hadoop in stand alone mode. Before you follow this - you have to install Ubuntu on VirtualBox. If you have not done that yet - then please follow this tutorial first - &lt;a href=&quot;/installation/2016/06/11/install-ubuntu-virtualbox-mac.html&quot;&gt;Installing Ubuntu on VirtualBox on MAC OS&lt;/a&gt;&lt;/p&gt;
+				<description>&lt;p&gt;In this tutorial, I am going to show you how to setup Hadoop in stand alone mode. Before you follow this - you have to install Ubuntu on VirtualBox. If you have not done that yet - then please follow this tutorial first - &lt;a href=&quot;/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html&quot;&gt;Installing Ubuntu on VirtualBox on MAC OS&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 1: Install Java&lt;/strong&gt;&lt;/p&gt;
 
@@ -115,7 +1358,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin
 
 &lt;ul&gt;
   &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
-  &lt;li&gt;Then press “wq” to write and quit&lt;/li&gt;
+  &lt;li&gt;Then press “:wq” to write and quit&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step8_add_export_bash.png&quot; alt=&quot;&amp;quot;Edit bashrc file&amp;quot;&quot; /&gt;&lt;/p&gt;
@@ -129,8 +1372,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;exec bash
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step12_exec_bash.png&quot; alt=&quot;&amp;quot;Exec bashrc file&amp;quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Step 10: Setup Java location in Hadoop&lt;/strong&gt;&lt;/p&gt;
 
@@ -152,7 +1394,7 @@ export PATH=$PATH:$HADOOP_PREFIX/bin
 
 &lt;ul&gt;
   &lt;li&gt;Press “esc” to exit insert mode&lt;/li&gt;
-  &lt;li&gt;Press “wq” to write and quit&lt;/li&gt;
+  &lt;li&gt;Press “:wq” to write and quit&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://s3.amazonaws.com/omairaasim.github.io/images/tutorial/hadoop/tutorial_2_install_hadoop_standalone_mode/Step10_uncomment_java.png&quot; alt=&quot;&amp;quot;Specify JAVA_HOME&amp;quot;&quot; /&gt;&lt;/p&gt;
@@ -180,9 +1422,9 @@ export PATH=$PATH:$HADOOP_PREFIX/bin
 
 &lt;p&gt;In the next tutorial, we will install Hadoop in a Pseudo Distributed mode.&lt;/p&gt;
 </description>
-				<pubDate>Sat, 11 Jun 2016 00:00:00 +0530</pubDate>
-				<link>/installation/2016/06/11/install-hadoop-standalone-mode-mac.html</link>
-				<guid isPermaLink="true">/installation/2016/06/11/install-hadoop-standalone-mode-mac.html</guid>
+				<pubDate>Fri, 03 Jun 2016 00:00:00 +0530</pubDate>
+				<link>/hadoop-tutorials/hadoop-installation/2016/06/03/install-hadoop-standalone-mode-mac.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/hadoop-installation/2016/06/03/install-hadoop-standalone-mode-mac.html</guid>
 			</item>
 		
 			<item>
@@ -442,8 +1684,8 @@ export PATH=$PATH:$HADOOP_PREFIX/bin
 &lt;p&gt;In the next tutorial - we will start with installing Hadoop on this Virtual machine.&lt;/p&gt;
 </description>
 				<pubDate>Wed, 01 Jun 2016 00:00:00 +0530</pubDate>
-				<link>/installation/2016/06/01/install-ubuntu-virtualbox-mac.html</link>
-				<guid isPermaLink="true">/installation/2016/06/01/install-ubuntu-virtualbox-mac.html</guid>
+				<link>/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html</link>
+				<guid isPermaLink="true">/hadoop-tutorials/hadoop-installation/2016/06/01/install-ubuntu-virtualbox-mac.html</guid>
 			</item>
 		
 	</channel>

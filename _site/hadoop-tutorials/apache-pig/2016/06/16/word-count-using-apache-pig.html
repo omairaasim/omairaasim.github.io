@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Word count example doing using Apache PIG</title>
+	
+	<meta name="description" content="Word count using PIG - Step by step tutorial on how to do word count using Apache PIG.">
+	
+	<meta name="author" content="Omair Aasim">
+
+	<!-- Enable responsive viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Le styles -->
+	<link href="/assets/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/assets/resources/syntax/syntax.css" rel="stylesheet">
+	<link href="/assets/css/style.css" rel="stylesheet">
+
+	<!-- Le fav and touch icons -->
+	<!-- Update these with your own images
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+
+	<link rel="alternate" type="application/rss+xml" title="" href="/feed.xml">
+</head>
+
+<body>
+	<nav class="navbar navbar-default visible-xs" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://github.com/omairaasim">
+				<i class="fa fa-github"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://twitter.com/omairaasim">
+				<i class="fa fa-twitter"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="mailto:omairaasim@gmail.com">
+				<i class="fa fa-envelope"></i>
+			</a>
+			
+			<a class="navbar-brand" href="/">
+				<img src="http://www.gravatar.com/avatar/ded6b2a2d3dcd1039f6fef5313d85cd2?s=35" class="img-circle" />
+				Omair Aasim
+			</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="/categories.html">Categories</a></li>
+				<li><a href="/tags.html">Tags</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+
+	<!-- nav-menu-dropdown -->
+	<div class="btn-group hidden-xs" id="nav-menu">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			<i class="fa fa-bars"></i>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+			<li><a href="/categories.html"><i class="fa fa-folder"></i>Categories</a></li>
+			<li><a href="/tags.html"><i class="fa fa-tags"></i>Tags</a></li>
+			<li class="divider"></li>
+			<li><a href="#"><i class="fa fa-arrow-up"></i>Top of Page</a></li>
+		</ul>
+	</div>
+
+	<div class="col-sm-3 sidebar hidden-xs" style="">
+		<!-- sidebar.html -->
+<header class="sidebar-header" role="banner">
+	<a href="/">
+		<img src="https://s3.amazonaws.com/omairaasim.github.io/images/omairaasim_thumb.jpg?s=150" class="img-circle" />
+	</a>
+	<h3 class="title">
+        <a href="/">Omair Aasim</a>
+    </h3>
+</header>
+
+
+<div id="bio" class="text-center">
+	Software Engineer by profession - Entrepreneur at heart - CoFounder and CTO at DeZyre
+</div>
+
+
+<div id="contact-list" class="text-center">
+	<ul class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://github.com/omairaasim">
+				<i class="fa fa-github-alt fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://twitter.com/omairaasim">
+				<i class="fa fa-twitter fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="mailto:omairaasim@gmail.com">
+				<i class="fa fa-envelope fa-lg"></i>
+			</a>
+		</li>
+		
+	</ul>
+	<ul id="contact-list-secondary" class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://pinterest.com/omairaasim">
+				<i class="fa fa-pinterest fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://linkedin.com/in/omairaasim">
+				<i class="fa fa-linkedin fa-lg"></i>
+			</a>
+		</li>
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="/feed.xml">
+				<i class="fa fa-rss fa-lg"></i>
+			</a>
+		</li>
+	</ul>
+</div>
+<!-- sidebar.html end -->
+
+	</div>
+
+	<div class="col-sm-9 col-sm-offset-3">
+		<div class="page-header">
+  <h1>Word count example doing using Apache PIG </h1>
+</div>
+
+<article>
+
+	<div class="col-sm-10">
+	 <span class="post-date">
+	   
+	   June
+	   16th,
+	   
+	   2016
+	 </span>
+	  <div class="article_body">
+	  <p>In this tutorial, we are going to do the word count example using Apache PIG.</p>
+
+<p>If you have not installed PIG - please follow the steps in this tutorial.</p>
+
+<ul>
+  <li><a href="/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html">Installing Apache PIG on MAC OS</a></li>
+</ul>
+
+<p>   <br />
+Lets get started !!!</p>
+
+<p> </p>
+
+<p><strong>Step 1: Create a sample file to do word count</strong></p>
+
+<p>First lets create a sample file to do the word count. I am going to use the vi editor to create a file called wordcount.txt. As sugggested in earlier tutorials - I am using MAC Terminal to connect to the virtual machine.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /home/hadoop/word_count.txt
+</code></pre>
+</div>
+<p> </p>
+
+<ul>
+  <li>Then press “i” to enable insert mode</li>
+  <li>Copy/paste the following lines<br />
+ </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apache pig was invented by yahoo
+pig is a data flow language
+using pig language we can process any data
+</code></pre>
+</div>
+<p> </p>
+
+<ul>
+  <li>Then press “esc” to exit insert mode</li>
+  <li>Finally press “:wq” to write and quit<br />
+ </li>
+</ul>
+
+<p><strong>Step 2: Copy the file to HDFS</strong></p>
+
+<p>Use the following command to copy the file into HDFS. I’m creating a new directory /data/pig to store the pig example files.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -copyFromLocal /home/hadoop/word_count.txt /data/pig/word_count.txt
+</code></pre>
+</div>
+<p> </p>
+
+<p>You can verify if the file has been copied to HDFS by running the command</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -ls /data/pig
+</code></pre>
+</div>
+
+<p> </p>
+
+<p><strong>Step 3: Invoke PIG</strong></p>
+
+<p>This will take you to the grunt prompt.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pig
+</code></pre>
+</div>
+
+<p> </p>
+
+<p><strong>Step 4: Load the data</strong></p>
+
+<p>First step is to load the data from the file. We use the load command for that purpose.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>all_lines = load '/data/pig/word_count.txt' as (lines:chararray);
+</code></pre>
+</div>
+<p> <br />
+Lets describe this relation</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>describe all_lines;
+</code></pre>
+</div>
+<p> <br />
+The out put will be</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>all_lines: {lines: chararray}
+</code></pre>
+</div>
+
+<p>This is interpreted as all_lines is name of relation. It contains 1 field <em>lines</em> of type chararray.</p>
+
+<p> <br />
+Since this is our first example - lets look at how the data looks. Run the dump command which will run a map reduce program to show the output.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dump all_lines;
+</code></pre>
+</div>
+<p> <br />
+You will see 3 tuples</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(apache pig was invented by yahoo)
+(pig is a data flow language)
+(using pig language we can process any data)
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Step 5: Tokenize the data</strong></p>
+
+<ul>
+  <li>
+    <p><strong>FOREACH…GENERATE</strong></p>
+
+    <p>This is like our standard looping. It is used to act on every row in a relation. Since we want to take each line and tokenize it, we will be using FOREACH…GENERATE to loop through each of the lines in the file.</p>
+  </li>
+  <li>
+    <p><strong>TOKENIZE</strong></p>
+
+    <p>We need to tokenize each line into separate word. We can use the built in TOKENIZE function.
+This function will split on whitespace and each result is placed in its own tuple and all tuples are placed in a bag.</p>
+  </li>
+  <li>
+    <p><strong>FLATTEN</strong></p>
+
+    <p>If we want to remove nesting and elevate each field to a top level field, we can use the FLATTEN modifier.</p>
+  </li>
+</ul>
+
+<p> </p>
+
+<p>To understand this - lets run these two examples to see the difference in output.
+ </p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>words_without_flatten = FOREACH all_lines GENERATE TOKENIZE(lines) as word;
+dump words_without_flatten;
+</code></pre>
+</div>
+<p> </p>
+
+<p>The output will be as shown</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>({(apache),(pig),(was),(invented),(by),(yahoo)})
+({(pig),(is),(a),(data),(flow),(language)})
+({(using),(pig),(language),(we),(can),(process),(any),(data)})
+</code></pre>
+</div>
+<p> </p>
+
+<p>As you can see, the TOKENIZE function has split the lines into single words and placed each word into its own tuple and all tuples are placed in a bag for a single line.</p>
+
+<p> </p>
+
+<p>Lets see how the data looks if we run the same command with FLATTEN modifier.
+ </p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>words_with_flatten = FOREACH all_lines GENERATE FLATTEN(TOKENIZE(lines)) as word;
+dump words_with_flatten;
+</code></pre>
+</div>
+<p> </p>
+
+<p>Here you can see - each word has been elevated to a top level tuple. For doing word count - data in this format is more useful to use so we can group it as shown in next step.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(apache)
+(pig)
+(was)
+(invented)
+(by)
+(yahoo)
+(pig)
+(is)
+(a)
+(data)
+(flow)
+(language)
+(using)
+(pig)
+(language)
+(we)
+(can)
+(process)
+(any)
+(data)
+</code></pre>
+</div>
+<p> </p>
+
+<p>Lets describe this relation</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>describe words_with_flatten;
+</code></pre>
+</div>
+<p> <br />
+This is the output. The relation <em>words_with_flatten</em> has 1 field word of type chararray.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>words_with_flatten: {word: chararray}
+</code></pre>
+</div>
+<p> </p>
+
+<p><strong>Step 6: Apply GROUP…BY</strong></p>
+
+<p>As the name suggest, the GROUP…BY statement is used to group the data in a single relation.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>grouped_words = GROUP words_with_flatten BY word;
+dump grouped_words;
+</code></pre>
+</div>
+
+<p> </p>
+
+<p>In the output for each word, it will show a bag containing tuples corresponding to the number of times the word occurred. For example, the word pig occurred 3 times - so you can see a bag containing 3 tuples of word pig.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(a,{(a)})
+(by,{(by)})
+(is,{(is)})
+(we,{(we)})
+(any,{(any)})
+(can,{(can)})
+(pig,{(pig),(pig),(pig)})
+(was,{(was)})
+(data,{(data),(data)})
+(flow,{(flow)})
+(using,{(using)})
+(yahoo,{(yahoo)})
+(apache,{(apache)})
+(process,{(process)})
+(invented,{(invented)})
+(language,{(language),(language)})
+</code></pre>
+</div>
+
+<p> </p>
+
+<p>Lets describe this relation.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>describe grouped_words;
+</code></pre>
+</div>
+
+<p> <br />
+This is the output. This means the relation grouped_words has 2 fields, <em>group</em> (the name PIG assigns by default to the group by field) and a bag <em>words_with_flatten</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>grouped_words: {group: chararray,words_with_flatten: {(word: chararray)}}
+</code></pre>
+</div>
+
+<p>If you notice the first field is the grouping field and by default PIG gives it an alias <em>group</em>.
+The second field is a bag containing the grouped fields which has the same schema as the original relation.</p>
+
+<p> </p>
+
+<p><strong>Step 7: Count the words</strong></p>
+
+<p>The last step is pretty easy. We have to iterate through the loop and for each word, count the number of tuples.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>word_count = FOREACH grouped_words GENERATE group as Word, COUNT(words_with_flatten) AS WordCount;
+dump word_count;
+</code></pre>
+</div>
+
+<p>The output is</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(a,1)
+(by,1)
+(is,1)
+(we,1)
+(any,1)
+(can,1)
+(pig,3)
+(was,1)
+(data,2)
+(flow,1)
+(using,1)
+(yahoo,1)
+(apache,1)
+(process,1)
+(invented,1)
+(language,2)
+</code></pre>
+</div>
+
+<p>Thats the result of our word count program.</p>
+
+<p>To exit grunt , type quit.</p>
+
+<p> </p>
+
+<p><strong>Step 8: Lets put all together</strong></p>
+
+<p>Rather than executing one line at a time in grunt prompt - we can save the entire script in a file and run it. We can also save the output in a file.</p>
+
+<ul>
+  <li>Create wordcount.pig file</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /home/hadoop/wordcount.pig
+</code></pre>
+</div>
+<p> </p>
+
+<ul>
+  <li>Copy paste the code below and save it</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>all_lines = LOAD '/data/pig/word_count.txt' AS (lines:chararray);
+words_with_flatten = FOREACH all_lines GENERATE FLATTEN(TOKENIZE(lines)) AS word;
+grouped_words = GROUP words_with_flatten BY word;
+word_count = FOREACH grouped_words GENERATE group AS Word, COUNT(words_with_flatten) AS WordCount;
+STORE word_count INTO '/output/pig/wordcount';
+</code></pre>
+</div>
+<p> </p>
+
+<ul>
+  <li>Run the script as follows</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pig /home/hadoop/wordcount.pig
+</code></pre>
+</div>
+<p> </p>
+
+<ul>
+  <li>Check the output</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hadoop fs -cat /output/pig/wordcount/part-r-00000
+</code></pre>
+</div>
+<p> </p>
+
+<p>Hope you enjoyed this tutorial. Word count is like the Hello World equivalent of PIG :)</p>
+
+	  </div>
+
+		
+		<ul class="tag_box list-unstyled list-inline">
+		  <li><i class="fa fa-folder-open"></i></li>
+		  
+		  
+			
+				<li><a href="/categories.html#hadoop-tutorials-ref">
+					hadoop-tutorials <span>(7)</span>
+					,
+				</a></li>
+			
+				<li><a href="/categories.html#apache-pig-ref">
+					apache-pig <span>(4)</span>
+					
+				</a></li>
+			
+		  
+		</ul>
+		
+
+		
+		<ul class="list-inline">
+		  <li><i class="fa fa-tags"></i></li>
+		  
+		  
+			
+				<li>
+					<a href="/tags.html#pig-ref">
+					pig <span>(4)</span>
+					
+					</a>
+				</li>
+			
+		  
+		  
+		</ul>
+		
+
+		<hr>
+
+		<div>
+      <section class="share col-sm-6">
+        <h4 class="section-title">Share Post</h4>
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Word count example doing using Apache PIG&via=omairaasim"
+           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+          <i class="fa fa-twitter fa-lg"></i>
+          Twitter
+        </a>
+        <a class="btn btn-default btn-sm facebook" href="https://www.facebook.com/sharer/sharer.php"
+           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+          <i class="fa fa-facebook fa-lg"></i>
+          Facebook
+        </a>
+        <a class="btn btn-default btn-sm gplus"
+           onclick="window.open('https://plus.google.com/share?url='+window.location.href, 'google-plus-share', 'width=490,height=530');return false;">
+          <i class="fa fa-google-plus fa-lg"></i>
+          Google+
+        </a>
+      </section>
+
+    
+    </div>
+
+    <div class="clearfix"></div>
+
+		<ul class="pager">
+		  
+		  <li class="previous"><a href="/hadoop-tutorials/apache-pig/2016/06/15/install-apache-pig.html" title="Install Apache PIG on MAC OS">&larr; Previous</a></li>
+		  
+		  
+		  <li class="next"><a href="/hadoop-tutorials/apache-pig/2016/06/17/pride-and-prejudice-casts-pig.html" title="Pride and Prejudice - Find which character is famous using Apache PIG">Next &rarr;</a></li>
+		  
+		</ul>
+
+		<hr>
+	</div>
+
+	<div class="col-sm-2 sidebar-2">
+
+	</div>
+</article>
+<div class="clearfix"></div>
+
+
+
+    
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'omairaasim';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+		
+	</div>
+
+	<script type="text/javascript" src="/assets/resources/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/assets/js/app.js"></script>
+</body>
+</html>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl =
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-26773104-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
